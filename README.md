@@ -3,10 +3,10 @@ Send Tautulli Stats via Webhook to Discord Channel
 
 Complete Media Stats:
 
-![Media Stats](https://imgur.com/bWzEEUJ)
+![Media Stats](https://i.imgur.com/bWzEEUJ.png)
 
 
 Concurrent Streams:
 
-![Streams](https://imgur.com/IKQxQwo)
+![Streams](https://i.imgur.com/IKQxQwo.png)
 
