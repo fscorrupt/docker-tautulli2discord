@@ -3,15 +3,9 @@ Send Tautulli Stats via Webhook to Discord Channel
 
 Just add ApiKey/WebhookUrl and Tautulli Url in Script:
 
-Discord Webhook Uri
-$Uri = 'https://discordapp.com/api/webhooks/XXXXXXXXXX'
-Tautulli Api Key
-$apiKey='XXXXXXXXXX'
-Tautulli Url with port
-$URL = "http://X.X.X.X:8181"
+![Config](https://imgur.com/c00f6e69-1db4-4911-a680-c4bac93fbf98)
 
-
-#HowTo Discord Webhook 
+# HowTo Discord Webhook 
 https://help.dashe.io/en/articles/2521940-how-to-create-a-discord-webhook-url
 
 Complete Media Stats:
