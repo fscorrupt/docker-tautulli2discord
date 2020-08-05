@@ -6,13 +6,6 @@ function LibraryStats {
 
 ############################################################>
 
-# Clear previously used variables
-$MovieList = $null
-$ShowList = $null
-$CountdataResultMovie = $null
-$CountdataResultShow = $null
-$SizeTotal = $null
-
 #Complete API URL
 $apiURL = "$URL/api/v2?apikey=$apiKey&cmd=get_libraries_table"
 
@@ -221,8 +214,10 @@ $StreamList = $null
 $MovieList = $null
 $ShowList = $null
 $UserList = $null
+$SizeTotal = $null
 $CountdataResultMovie = $null
 $CountdataResultShow = $null
+
 # Headings
 $HeadingMovie = "Top $Count played **Movies** in the last $Days Days!"
 $HeadingShow = "Top $Count played **Shows** in the last $Days Days!"  
