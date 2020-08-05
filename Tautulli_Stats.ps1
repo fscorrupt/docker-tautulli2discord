@@ -80,7 +80,7 @@ $CountdataResultShow += "> Total Library Size - **$SizeTotal $TFormat** `n"
 
 #Generate Content.
 $Content = @"
-**Library stats:**
+$HeadingStats
 $CountdataResultShow
 "@
 
