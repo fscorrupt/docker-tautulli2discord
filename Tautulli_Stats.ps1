@@ -1,10 +1,26 @@
-﻿Clear-Host
+Clear-Host
+
+<############################################################
+
+Note - In order for this to work, you must set "api_sql = 1"
+       in the Tautulli config file. It will require a restart
+       of Tautulli.
+
+#############################################################>
+
 function LibraryStats {
 <############################################################
 
  Do NOT edit lines below unless you know what you are doing!
 
 ############################################################>
+
+# Clear previously used variables
+$MovieList = $null
+$ShowList = $null
+$CountdataResultMovie = $null
+$CountdataResultShow = $null
+$SizeTotal = $null
 
 #Complete API URL
 $apiURL = "$URL/api/v2?apikey=$apiKey&cmd=get_libraries_table"
@@ -80,7 +96,7 @@ $CountdataResultShow += "> Total Library Size - **$SizeTotal $TFormat** `n"
 
 #Generate Content.
 $Content = @"
-$HeadingStats
+**Library stats:**
 $CountdataResultShow
 "@
 
@@ -149,19 +165,45 @@ function Top10 {
   $dataResult = Invoke-RestMethod -Method Get -Uri $apiURL
 
   #Split Data into Movie/Show/User
-  $MovieStats = $dataResult.response.data.rows | select title, guid, media_type, total_plays -Unique | where {($_.total_plays -ne $null) -and ($_.media_type -eq 'movie')}| where {($_.title -ne '')}| Sort-Object -Descending -Property total_plays | select -First $Count
-  $ShowStats = $dataResult.response.data.rows | select title, guid, media_type, total_plays -Unique | where {($_.total_plays -ne $null) -and ($_.media_type -eq 'episode')}| where {($_.title -ne '')}| Sort-Object -Descending -Property total_plays | select -First $Count
+  $MovieStats = $dataResult.response.data.rows | select title, guid, media_type, total_plays, rating_key -Unique | where {($_.total_plays -ne $null) -and ($_.media_type -eq 'movie')}| where {($_.title -ne '')}| Sort-Object -Descending -Property total_plays | select -First $Count
+  $ShowStats = $dataResult.response.data.rows | select title, guid, media_type, total_plays, rating_key -Unique | where {($_.total_plays -ne $null) -and ($_.media_type -eq 'episode')}| where {($_.title -ne '')}| Sort-Object -Descending -Property total_plays | select -First $Count
   $UserStats = $dataResult.response.data.rows | select user, friendly_name, total_plays -Unique | where {($_.user -ne $null) -and ($_.user -ne "") -and ($_.user -ne "Local") -and ($_.total_plays -ne $null)} | Sort-Object -Descending -Property total_plays | select -First $Count
 
   #Generate nice looking Output....
   foreach ($Movie in $MovieStats){
-    $MovieStat=$Movie.guid.replace('//','').split('?').replace('com.plexapp.agents.imdb:','https://www.imdb.com/title/').replace('?lang=de','').replace('?lang=en','')[0]
-    $MovieList += "> "+"["+$Movie.title.Replace('ö','oe').Replace('ä','ae').Replace('ü','ue').Replace('ß','ss').Replace('Ö','Oe').Replace('Ü','Ue').Replace('Ä','Ae').Replace('é','e')+"]("+$MovieStat+")"+" - Play Count: "+"**"+$Movie.total_plays+"**"+"`n"
-  }
+    $RatingKey = $Movie.rating_key
+    # This section gets TMDB Url
+    $query = "
+    SELECT themoviedb_url
+    FROM themoviedb_lookup 
+    WHERE rating_key = '$RatingKey'
+    "
+
+    #Complete API URL for SQL querying
+    $apiSQLQueryURL = "$URL/api/v2?apikey=$apiKey&cmd=sql&query=" + $query
+
+    $SQLQuerydataResult = Invoke-RestMethod -Method Get -Uri $apiSQLQueryURL
+
+    $MovieStat = $SQLQuerydataResult.response.data.themoviedb_url
+    $MovieList += "> "+"["+$Movie.title.Replace('-',' ').Replace('ö','oe').Replace('ä','ae').Replace('ü','ue').Replace('ß','ss').Replace('Ö','Oe').Replace('Ü','Ue').Replace('Ä','Ae').Replace('é','e')+"](<"+$MovieStat+">)"+" - Play Count: "+"**"+$Movie.total_plays+"**"+"`n"
+   }
 
   foreach ($Show in $ShowStats){
-    $ShowStat=$Show.guid.replace('//','').split('/').replace('com.plexapp.agents.thetvdb:','https://www.thetvdb.com/?tab=series&id=').replace('com.plexapp.agents.themoviedb:','https://www.thetvdb.com/?tab=series&id=')[0]
-    $ShowList += "> "+"["+$Show.title.Replace('Ã©','e').Replace("'",'').Replace("!",'').Replace("&",'and').Replace("#",'').Replace(":",'').Replace("(",'').Replace(")",'')+"]("+$ShowStat+")"+" - Play Count: "+"**"+$Show.total_plays+"**"+"`n"
+    $RatingKey = $Show.rating_key
+    # This section gets TMDB Url
+    $query = "
+    SELECT themoviedb_url
+    FROM themoviedb_lookup 
+    WHERE rating_key = '$RatingKey'
+    "
+
+    #Complete API URL for SQL querying
+    $apiSQLQueryURL = "$URL/api/v2?apikey=$apiKey&cmd=sql&query=" + $query
+
+    $SQLQuerydataResult = Invoke-RestMethod -Method Get -Uri $apiSQLQueryURL
+
+    $ShowStat = $SQLQuerydataResult.response.data.themoviedb_url
+    $ShowList += "> "+"["+$Show.title.Replace('-',' ').Replace('Ã©','e').Replace("'",'').Replace("!",'').Replace("&",'and').Replace("#",'').Replace(":",'').Replace("(",'').Replace(")",'')+"](<"+$ShowStat+">)"+" - Play Count: "+"**"+$Show.total_plays+"**"+"`n"
   }
 
   foreach ($User in $UserStats){
@@ -186,7 +228,8 @@ function Top10 {
 
   #Send top 10 Movies to Discord
   $MoviePayload = [PSCustomObject]@{content = $MovieContent}
-  Invoke-RestMethod -Uri $uri -Body ($MoviePayload | ConvertTo-Json -Depth 4) -Method Post -ContentType 'Application/Json'
+  Invoke-RestMethod -Uri $uri -Body ($MoviePayload | ConvertTo-Json) -Method Post -ContentType 'Application/Json'
+  #Invoke-RestMethod -Uri $uri -Body ($MoviePayload | ConvertTo-Json -Depth 4) -Method Post -ContentType 'Application/Json'
 
   #Send top 10 Shows to Discord
   $ShowPayload = [PSCustomObject]@{content = $ShowContent}
@@ -202,9 +245,9 @@ $Count = '10'
 # How many Days do you want to look Back?
 $Days = '30'
 # Discord Webhook Prod Uri
-$Uri = 'https://discordapp.com/api/webhooks/XXXXXXXXXX'
+$Uri = 'https://discordapp.com/api/webhooks/708315585188069399/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 # Tautulli Api Key
-$apiKey='XXXXXXXXXX'
+$apiKey='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 # Tautulli Url with port
 $URL = "http://X.X.X.X:8181"
 
@@ -214,10 +257,8 @@ $StreamList = $null
 $MovieList = $null
 $ShowList = $null
 $UserList = $null
-$SizeTotal = $null
 $CountdataResultMovie = $null
 $CountdataResultShow = $null
-
 # Headings
 $HeadingMovie = "Top $Count played **Movies** in the last $Days Days!"
 $HeadingShow = "Top $Count played **Shows** in the last $Days Days!"  
