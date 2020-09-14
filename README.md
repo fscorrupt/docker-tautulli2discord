@@ -1,6 +1,7 @@
 # TautulliStats2Discord
 Send Tautulli Stats via Webhook to Discord Channel
 
+SQL API in Config File is required.
 Just add ApiKey/WebhookUrl and Tautulli Url in Script:
 
 ![Config](https://i.imgur.com/HYkyJHs.png)
