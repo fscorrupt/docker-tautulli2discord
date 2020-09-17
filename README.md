@@ -1,14 +1,16 @@
-# TautulliStats2Discord
-Send Tautulli Stats via Webhook to Discord Channel
+# Tautulli2Discord
+This is a collection of PowerShell scripts that collect information from Tautulli's API and sends it off to Discord via webhooks.
 
+# Configuration
 SQL API in Config File is required.
 Just add ApiKey/WebhookUrl and Tautulli Url in Script:
 
 ![Config](https://i.imgur.com/HYkyJHs.png)
 
 # HowTo Discord Webhook 
-https://help.dashe.io/en/articles/2521940-how-to-create-a-discord-webhook-url
+Information on how to set up a Discord webhook can be found be [here.](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
 
+# Examples
 Complete Media Stats:
 
 ![Media Stats](https://i.imgur.com/bWzEEUJ.png)
