@@ -11,12 +11,12 @@ Just add ApiKey/WebhookUrl and Tautulli Url in Script:
 Information on how to set up a Discord webhook can be found be [here.](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
 
 # Examples
-Complete Media Stats:
+Tautulli_Stats.ps1 - Top Everything
 
 ![Media Stats](https://i.imgur.com/bWzEEUJ.png)
 
 
-Concurrent Streams:
+Tautulli_Stats.ps1 - Concurrent Streams
 
 ![Streams](https://i.imgur.com/IKQxQwo.png)
 
