@@ -11,6 +11,11 @@ Just add ApiKey/WebhookUrl and Tautulli Url in Script:
 Information on how to set up a Discord webhook can be found be [here.](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
 
 # Examples
+Tautulli_Monthly.ps1 - Whole Year in Monthly Stats.
+Chart will be created in Powershell without the need of Excel ("System.Windows.Forms.DataVisualization")
+This Script requires Powershell Core!!!
+![Tautulli_Monthly.ps1](https://i.imgur.com/Lhddb8O.png)
+
 Tautulli_Stats.ps1 - Top Everything
 
 ![Media Stats](https://i.imgur.com/bWzEEUJ.png)
