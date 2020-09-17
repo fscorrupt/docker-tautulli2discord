@@ -422,7 +422,7 @@ function CreateChart {
    $chart1.Series["TVPlays"].Legend = "Legend1"
    $chart1.Series["TVPlays"].color = "#ED7D31"
    $objResult.TVPlays | ForEach-Object {$chart1.Series["TVPlays"].Points.addxy("TVPlays", $_) }
-<# data series
+# data series
    [void]$chart1.Series.Add("MusicPlays")
    $chart1.Series["MusicPlays"].ChartType = "Column"
    $chart1.Series["MusicPlays"].BorderWidth  = 3
@@ -430,7 +430,7 @@ function CreateChart {
    $chart1.Series["MusicPlays"].chartarea = "ChartArea1"
    $chart1.Series["MusicPlays"].Legend = "Legend1"
    $chart1.Series["MusicPlays"].color = "#A5A5A5"
-   $objResult.MusicPlays | ForEach-Object {$chart1.Series["MusicPlays"].Points.addxy("MusicPlays", $_) }#>
+   $objResult.MusicPlays | ForEach-Object {$chart1.Series["MusicPlays"].Points.addxy("MusicPlays", $_) }#
 # data series
    [void]$chart1.Series.Add("TotalPlays")
    $chart1.Series["TotalPlays"].ChartType = "Column"
