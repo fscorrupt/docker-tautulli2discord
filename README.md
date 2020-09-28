@@ -2,7 +2,7 @@
 This is a collection of PowerShell scripts that collect information from Tautulli's API and sends it off to Discord via webhooks.
 
 # Configuration
-All of the scripts have a few variables at the top that need to be set. Such as **Webhook URI**, **Tautulli URL** (with port), **Tautulli API Key**, and a few others.
+All of the scripts have a few variables after the Functions that need to be set. Such as **Webhook URI**, **Tautulli URL** (with port), **Tautulli API Key**, and a few others.
 
 # HowTo Discord Webhook 
 Information on how to set up a Discord webhook can be found be [here.](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
