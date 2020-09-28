@@ -12,12 +12,11 @@ Tautulli_Monthly.ps1 - Whole Year in Monthly Stats.
 Chart will be created in Powershell without the need of Excel ("System.Windows.Forms.DataVisualization")
 This Script requires Powershell Core!!!
 
-![Tautulli_Monthly.ps1](https://i.imgur.com/Lhddb8O.png)
+![Tautulli_Monthly.ps1](https://i.imgur.com/Hnf5S6N.png)
 
 Tautulli_Stats.ps1 - Top Everything
 
 ![Media Stats](https://i.imgur.com/bWzEEUJ.png)
-
 
 Tautulli_Stats.ps1 - Concurrent Streams
 
