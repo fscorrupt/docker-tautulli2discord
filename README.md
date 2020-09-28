@@ -3,7 +3,9 @@ This is a collection of PowerShell scripts that collect information from Tautull
 
 # Configuration
 All of the scripts have a few variables after the Functions that need to be set. Such as **Webhook URI**, **Tautulli URL** (with port), **Tautulli API Key**, and a few others.
+
 Some Examples....
+
 ![Config](https://i.imgur.com/Pfok2ob.png)
 
 # Tautulli Specific 
