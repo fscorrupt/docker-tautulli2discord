@@ -3,6 +3,12 @@ This is a collection of PowerShell scripts that collect information from Tautull
 
 # Configuration
 All of the scripts have a few variables after the Functions that need to be set. Such as **Webhook URI**, **Tautulli URL** (with port), **Tautulli API Key**, and a few others.
+Some Examples....
+![Config](https://i.imgur.com/Pfok2ob.png)
+
+# Tautulli Specific 
+If you want Tautulli to calculate the total file size for TV Shows/Seasons and Artists/Albums, you must enable "Calculate Total File Sizes" in Settings > General AND refresh media info. 
+Some Scipts directly call Tautulli SQL, In order for this to work, you must set "api_sql = 1" in the Tautulli config file. It will require a restart of Tautulli.
 
 # HowTo Discord Webhook 
 Information on how to set up a Discord webhook can be found be [here.](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
