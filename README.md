@@ -23,3 +23,7 @@ Tautulli_Stats.ps1 - Concurrent Streams
 
 ![Streams](https://i.imgur.com/IKQxQwo.png)
 
+Recently_Added.ps1 - Last x Days back -  Movies/Shows added to Plex.
+
+![Recently_Added](https://i.imgur.com/znJh1Pw.png)
+
