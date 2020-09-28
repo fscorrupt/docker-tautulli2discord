@@ -9,7 +9,8 @@ Some Examples....
 ![Config](https://i.imgur.com/Pfok2ob.png)
 
 # Tautulli Specific 
-If you want Tautulli to calculate the total file size for TV Shows/Seasons and Artists/Albums, you must enable "Calculate Total File Sizes" in Settings > General AND refresh media info. 
+If you want Tautulli to calculate the total file size for TV Shows/Seasons and Artists/Albums, you must enable "Calculate Total File Sizes" in Settings > General AND refresh media info.
+
 Some Scipts directly call Tautulli SQL, In order for this to work, you must set "api_sql = 1" in the Tautulli config file. It will require a restart of Tautulli.
 
 # HowTo Discord Webhook 
