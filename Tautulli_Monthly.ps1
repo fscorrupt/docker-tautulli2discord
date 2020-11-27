@@ -126,70 +126,70 @@ function Invoke-PayloadBuilder {
 }
 function Invoke-PSDsHook {
     <#
-    .SYNOPSIS
-    Invoke-PSDsHook
-    Use PowerShell classes to make using Discord Webhooks easy and extensible
+      .SYNOPSIS
+      Invoke-PSDsHook
+      Use PowerShell classes to make using Discord Webhooks easy and extensible
 
-    .DESCRIPTION
-    This function allows you to use Discord Webhooks with embeds, files, and various configuration settings
+      .DESCRIPTION
+      This function allows you to use Discord Webhooks with embeds, files, and various configuration settings
 
-    .PARAMETER CreateConfig
-    If specified, will create a configuration file containing the webhook URL as the argument.
-    You can use the ConfigName parameter to create another configuration separate from the default.
+      .PARAMETER CreateConfig
+      If specified, will create a configuration file containing the webhook URL as the argument.
+      You can use the ConfigName parameter to create another configuration separate from the default.
 
-    .PARAMETER WebhookUrl   
-    If used with an embed or file, this URL will be used in the webhook call.
+      .PARAMETER WebhookUrl   
+      If used with an embed or file, this URL will be used in the webhook call.
 
-    .PARAMETER ConfigName
-    Specified a name for the configuration file. 
-    Can be used when creating a configuration file, as well as when passing embeds/files.
+      .PARAMETER ConfigName
+      Specified a name for the configuration file. 
+      Can be used when creating a configuration file, as well as when passing embeds/files.
 
-    .PARAMETER ListConfigs
-    Lists configuration files
+      .PARAMETER ListConfigs
+      Lists configuration files
 
-    .PARAMETER EmbedObject
-    Accepts an array of [EmbedObject]'s to pass in the webhook call.
+      .PARAMETER EmbedObject
+      Accepts an array of [EmbedObject]'s to pass in the webhook call.
 
-    .EXAMPLE
-    (Create a configuration file)
-    Configuration files are stored in a sub directory of your user's home directory named .psdshook/configs
+      .EXAMPLE
+      (Create a configuration file)
+      Configuration files are stored in a sub directory of your user's home directory named .psdshook/configs
 
-    Invoke-PsDsHook -CreateConfig "www.hook.com/hook"
-    .EXAMPLE
-    (Create a configuration file with a non-standard name)
-    Configuration files are stored in a sub directory of your user's home directory named .psdshook/configs
+      Invoke-PsDsHook -CreateConfig "www.hook.com/hook"
+      .EXAMPLE
+      (Create a configuration file with a non-standard name)
+      Configuration files are stored in a sub directory of your user's home directory named .psdshook/configs
 
-    Invoke-PsDsHook -CreateConfig "www.hook.com/hook2" -ConfigName 'config2'
+      Invoke-PsDsHook -CreateConfig "www.hook.com/hook2" -ConfigName 'config2'
 
-    .EXAMPLE
-    (Send an embed with the default config)
+      .EXAMPLE
+      (Send an embed with the default config)
 
-    using module PSDsHook
+      using module PSDsHook
 
-    If the module is not in one of the folders listed in ($env:PSModulePath -split "$([IO.Path]::PathSeparator)")
-    You must specify the full path to the psm1 file in the above using statement
-    Example: using module 'C:\users\thegn\repos\PsDsHook\out\PSDsHook\0.0.1\PSDsHook.psm1'
+      If the module is not in one of the folders listed in ($env:PSModulePath -split "$([IO.Path]::PathSeparator)")
+      You must specify the full path to the psm1 file in the above using statement
+      Example: using module 'C:\users\thegn\repos\PsDsHook\out\PSDsHook\0.0.1\PSDsHook.psm1'
 
-    Create embed builder object via the [DiscordEmbed] class
-    $embedBuilder = [DiscordEmbed]::New(
+      Create embed builder object via the [DiscordEmbed] class
+      $embedBuilder = [DiscordEmbed]::New(
                         'title',
                         'description'
                     )
 
-    Add blue color
-    $embedBuilder.WithColor(
+      Add blue color
+      $embedBuilder.WithColor(
         [DiscordColor]::New(
                 'blue'
         )
-    )
+      )
     
-    Finally, call the function that will send the embed array to the webhook url via the default configuraiton file
-    Invoke-PSDsHook $embedBuilder -Verbose
+      Finally, call the function that will send the embed array to the webhook url via the default configuraiton file
+      Invoke-PSDsHook $embedBuilder -Verbose
 
-    .EXAMPLE
-    (Send an webhook with just text)
+      .EXAMPLE
+      (Send an webhook with just text)
 
-    Invoke-PSDsHook -HookText 'this is the webhook message' -Verbose
+      Invoke-PSDsHook -HookText 'this is the webhook message' -Verbose
     #>    
     [cmdletbinding()]
     param(
@@ -366,22 +366,22 @@ function Invoke-PSDsHook {
     }
 }
 function CreateChart {
-# Chart creator
+  # Chart creator
 
-[void][Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms.DataVisualization")
+  [void][Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms.DataVisualization")
 
-# chart object
+  # chart object
    $chart1 = New-object System.Windows.Forms.DataVisualization.Charting.Chart
    $chart1.Width = 1200
    $chart1.Height = 600
    $chart1.BackColor = [System.Drawing.Color]::White
 
-# title 
+  # title 
    [void]$chart1.Titles.Add("Monthly Plays!")
    $chart1.Titles[0].Font = "Calibri,13pt"
    $chart1.Titles[0].Alignment = "topLeft"
 
-# chart area 
+  # chart area 
    $chartarea = New-Object System.Windows.Forms.DataVisualization.Charting.ChartArea
    $chartarea.Name = "ChartArea1"
    $chartarea.AxisY.Title = "Total Plays"
@@ -390,12 +390,12 @@ function CreateChart {
    $chartarea.AxisX.Interval = 1
    $chart1.ChartAreas.Add($chartarea)
 
-# legend 
+  # legend 
    $legend = New-Object system.Windows.Forms.DataVisualization.Charting.Legend
    $legend.name = "Legend1"
    $chart1.Legends.Add($legend)
 
-# data series
+  # data series
    [void]$chart1.Series.Add("Month")
    $chart1.Series["Month"].ChartType = "Column"
    $chart1.Series["Month"].BorderWidth  = 3
@@ -404,7 +404,7 @@ function CreateChart {
    $chart1.Series["Month"].Legend = "Legend1"
    $chart1.Series["Month"].color = "#90b19c"
    $objResult.Month | ForEach-Object {$chart1.Series["Month"].Points.addxy($_, $_) }
-# data series
+  # data series
    [void]$chart1.Series.Add("MoviePlays")
    $chart1.Series["MoviePlays"].ChartType = "Column"
    $chart1.Series["MoviePlays"].BorderWidth  = 3
@@ -413,7 +413,7 @@ function CreateChart {
    $chart1.Series["MoviePlays"].Legend = "Legend1"
    $chart1.Series["MoviePlays"].color = "#5B9BD5"
    $objResult.MoviePlays | ForEach-Object {$chart1.Series["MoviePlays"].Points.addxy("MoviePlays", $_) }
-# data series
+  # data series
    [void]$chart1.Series.Add("TVPlays")
    $chart1.Series["TVPlays"].ChartType = "Column"
    $chart1.Series["TVPlays"].BorderWidth  = 3
@@ -422,7 +422,7 @@ function CreateChart {
    $chart1.Series["TVPlays"].Legend = "Legend1"
    $chart1.Series["TVPlays"].color = "#ED7D31"
    $objResult.TVPlays | ForEach-Object {$chart1.Series["TVPlays"].Points.addxy("TVPlays", $_) }
-# data series
+  # data series
    [void]$chart1.Series.Add("MusicPlays")
    $chart1.Series["MusicPlays"].ChartType = "Column"
    $chart1.Series["MusicPlays"].BorderWidth  = 3
@@ -431,7 +431,7 @@ function CreateChart {
    $chart1.Series["MusicPlays"].Legend = "Legend1"
    $chart1.Series["MusicPlays"].color = "#A5A5A5"
    $objResult.MusicPlays | ForEach-Object {$chart1.Series["MusicPlays"].Points.addxy("MusicPlays", $_) }#
-# data series
+  # data series
    [void]$chart1.Series.Add("TotalPlays")
    $chart1.Series["TotalPlays"].ChartType = "Column"
    $chart1.Series["TotalPlays"].BorderWidth  = 3
@@ -440,11 +440,18 @@ function CreateChart {
    $chart1.Series["TotalPlays"].Legend = "Legend1"
    $chart1.Series["TotalPlays"].color = "#FFC000"
    $objResult.TotalPlays | ForEach-Object {$chart1.Series["TotalPlays"].Points.addxy("TotalPlays", $_) }
-# save chart
+  # save chart
    $chart1.SaveImage($PicturePath,"png")
    Clear-Host
 }
-
+function Remove-Diacritics{
+    Param(
+        [String]$inputString
+    )
+    #replace diacritics
+    $sb = [Text.Encoding]::ASCII.GetString([Text.Encoding]::GetEncoding("Cyrillic").GetBytes($inputString))
+    return $sb
+}
 
 # Discord Webhook Prod Uri
 $Uri = 'https://discordapp.com/api/webhooks/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
@@ -457,7 +464,7 @@ $PicturePath = "C:\temp\Monthly_Plays.png"
 
 <############################################################
 
-Do NOT edit lines below unless you know what you are doing!
+    Do NOT edit lines below unless you know what you are doing!
 
 ############################################################>
 
@@ -480,7 +487,7 @@ $i = 0
 foreach($month in $months) {
     #Fill Temp object with current section data
     $objTemp = $objTemplate | Select-Object *
-    $objTemp.Month = $month -replace 'ä', 'a'
+    $objTemp.Month = Remove-Diacritics -inputString $month
     $objTemp.MoviePlays = $Movieplays[$i]
     $objTemp.TVPlays = $TVplays[$i]
     $objTemp.MusicPlays= $Musicplays[$i]
@@ -498,7 +505,7 @@ foreach($month in $months) {
 $stringResult = $objResult | FT -AutoSize | Out-String
 
 <# Preview the data
-$stringResult
+    $stringResult
 #>
 
 $Content = @"
