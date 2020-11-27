@@ -1,4 +1,14 @@
-﻿function RecentlyAdded {
+function Remove-Diacritics
+{
+    Param(
+        [String]$inputString
+    )
+    #replace diacritics
+    $sb = [Text.Encoding]::ASCII.GetString([Text.Encoding]::GetEncoding("Cyrillic").GetBytes($inputString))
+    return $sb
+}
+
+function RecentlyAdded {
   <############################################################
 
       Do NOT edit lines below unless you know what you are doing!
@@ -20,21 +30,21 @@
     $DateAdded = (Get-Date 01.01.1970).AddSeconds($Movie.added_at)
     $DateBack = (Get-Date).AddDays(-$DaysBack)
     if ($DateAdded -ge $DateBack){
-    $RatingKey = $Movie.rating_key
-    # This section gets TMDB Url
-    $query = "
-    SELECT themoviedb_url
-    FROM themoviedb_lookup 
-    WHERE rating_key = '$RatingKey'
-    "
+      $RatingKey = $Movie.rating_key
+      # This section gets TMDB Url
+      $query = "
+        SELECT themoviedb_url
+        FROM themoviedb_lookup 
+        WHERE rating_key = '$RatingKey'
+      "
 
-    #Complete API URL for SQL querying
-    $apiSQLQueryURL = "$URL/api/v2?apikey=$apiKey&cmd=sql&query=" + $query
+      #Complete API URL for SQL querying
+      $apiSQLQueryURL = "$URL/api/v2?apikey=$apiKey&cmd=sql&query=" + $query
 
-    $SQLQuerydataResult = Invoke-RestMethod -Method Get -Uri $apiSQLQueryURL
-
-    $MovieStat = $SQLQuerydataResult.response.data.themoviedb_url
-    $MovieList += "> "+"["+$Movie.title.Replace('-',' ').Replace('ö','oe').Replace('ä','ae').Replace('ü','ue').Replace('ß','ss').Replace('Ö','Oe').Replace('Ü','Ue').Replace('Ä','Ae').Replace('é','e')+" ("+$Movie.year+")](<"+$MovieStat+">)"+"`n"
+      $SQLQuerydataResult = Invoke-RestMethod -Method Get -Uri $apiSQLQueryURL
+      $MovieTitle = Remove-Diacritics -inputString $Movie.title
+      $MovieStat = $SQLQuerydataResult.response.data.themoviedb_url
+      $MovieList += "> "+"["+$MovieTitle+" ("+$Movie.year+")](<"+$MovieStat+">)"+"`n"
     }
    }
 
@@ -42,21 +52,22 @@
     $DateAdded = (Get-Date 01.01.1970).AddSeconds($Show.added_at)
     $DateBack = (Get-Date).AddDays(-$DaysBack)
     if ($DateAdded -ge $DateBack){
-    $RatingKey = $Show.grandparent_rating_key
-     # This section gets TMDB Url
-    $query = "
-    SELECT themoviedb_url
-    FROM themoviedb_lookup 
-    WHERE rating_key = '$RatingKey'
-    "
+      $RatingKey = $Show.grandparent_rating_key
+      # This section gets TMDB Url
+      $query = "
+        SELECT themoviedb_url
+        FROM themoviedb_lookup 
+        WHERE rating_key = '$RatingKey'
+      "
 
-    #Complete API URL for SQL querying
-    $apiSQLQueryURL = "$URL/api/v2?apikey=$apiKey&cmd=sql&query=" + $query
+      #Complete API URL for SQL querying
+      $apiSQLQueryURL = "$URL/api/v2?apikey=$apiKey&cmd=sql&query=" + $query
 
-    $SQLQuerydataResult = Invoke-RestMethod -Method Get -Uri $apiSQLQueryURL
+      $SQLQuerydataResult = Invoke-RestMethod -Method Get -Uri $apiSQLQueryURL
 
-    $ShowStat = $SQLQuerydataResult.response.data.themoviedb_url
-    $ShowList += "> "+"["+$Show.grandparent_title.Replace('-',' ').Replace('Ã©','e').Replace("'",'').Replace("!",'').Replace("&",'and').Replace("#",'').Replace(":",'').Replace("(",'').Replace(")",'')+"](<"+$ShowStat+">)"+" - "+$Show.parent_title +" / Episode "+$Show.media_index+"`n"
+      $ShowStat = $SQLQuerydataResult.response.data.themoviedb_url
+      $ShowTitle = Remove-Diacritics -inputString $Show.grandparent_title
+      $ShowList += "> "+"["+$ShowTitle.Replace('-',' ').Replace('Ã©','e').Replace("'",'').Replace("!",'').Replace("&",'and').Replace("#",'').Replace(":",'').Replace("(",'').Replace(")",'')+"](<"+$ShowStat+">)"+" - "+$Show.parent_title +" / Episode "+$Show.media_index+"`n"
     }
   }
 
