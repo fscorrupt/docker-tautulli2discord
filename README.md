@@ -16,18 +16,23 @@ I have set my scripts up to run as a Scheduled Task, so it's completely hands of
 
 # Examples
 CurrentStreams.ps1
+
 ![DiscordCurrentlyStreaming.ps1](https://i.imgur.com/pDA3Tvs.png)
 
 PopularOnPlex.ps1
+
 ![PopularOnPlex.ps1](https://i.imgur.com/MpEhVWJ.png)
 
 LibraryStats.ps1
+
 ![DiscordLibraryStats.ps1](https://i.imgur.com/ghONij6.png)
 
 PlaysForLast12Months_v2.ps1
+
 ![DiscordPlaysForLast12Months_v2.ps1](https://i.imgur.com/NLqkeI2.png)
 
 TopXUsersByMediaType.ps1
+
 ![DiscordTopXUsersByMediaType.ps1](https://i.imgur.com/0SNBXA9.png)
 
 # Issues
