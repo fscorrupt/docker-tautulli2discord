@@ -35,7 +35,7 @@ TopXUsersByMediaType.ps1
 Probably. Just let me know and I will try to correct.
 
 # Thanks
-Many thanks to FS.Corrupt for his help and contributions. And thanks to Ladrek for coming up with some of the ideas for these scripts.
+Many thanks to @Shayne55434 for his help and contributions
 
 # Enjoy
 This one is simple.
