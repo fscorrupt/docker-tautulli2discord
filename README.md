@@ -9,6 +9,8 @@ Information on how to set up a Discord webhook can be found be [here.](https://s
 # Usage
 That's it. Once the webhook(s) are created and the variables are filled in properly, you should be able to run the scripts and it send the relevant information to your Discord server/channel.
 
+If you want to use it in Docker, here is an example: [Docker](https://github.com/fscorrupt/Tautulli2Discord/blob/28d9f613ba52fea70b56c150ee5f7d9c99e8f57a/Docker_Command.txt)
+
 I have set my scripts up to run as a Scheduled Task, so it's completely hands off.
 
 # Examples
