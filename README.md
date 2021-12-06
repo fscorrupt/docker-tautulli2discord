@@ -28,7 +28,6 @@ PlaysForLast12Months_v2.ps1
 ![DiscordPlaysForLast12Months_v2.ps1](https://i.imgur.com/NLqkeI2.png)
 
 TopXUsersByMediaType.ps1
-
 ![DiscordTopXUsersByMediaType.ps1](https://i.imgur.com/0SNBXA9.png)
 
 # Issues
