@@ -1,0 +1,14 @@
+{
+   "Tautulli": {
+      "Url": "",
+      "APIKey": ""
+   },
+   "SABnzbd": {
+      "Url": "",
+      "APIKey": ""
+   },
+   "Webhooks": {
+      "Webhook1": "",
+      "Webhook2": ""
+   }
+}

@@ -1,37 +1,41 @@
 # Tautulli2Discord
 This is a collection of PowerShell scripts that collect information from Tautulli's API and sends it off to Discord via webhooks.
 
+# Disclaimer
+This is my very first GitHub repo that I have made public and decided to share with the Plex community. I am no scripting guru and likely do not follow best practices in my coding. That being said, I am always open to suggestions and contstructive criticism.
+
 # Configuration
-All of the scripts have a few variables after the Functions that need to be set. Such as **Webhook URI**, **Tautulli URL** (with port), **Tautulli API Key**, and a few others.
+I tried to make the scripts as easy to use as possible. The scripts mostly rely on the config.ini file, but some will have a few variables that are specific to the script.
 
-Some Examples....
-
-![Config](https://i.imgur.com/Pfok2ob.png)
-
-# Tautulli Specific 
-If you want Tautulli to calculate the total file size for TV Shows/Seasons and Artists/Albums, you must enable "Calculate Total File Sizes" in Settings > General AND refresh media info.
-
-Some Scipts directly call Tautulli SQL, In order for this to work, you must set "api_sql = 1" in the Tautulli config file. It will require a restart of Tautulli.
-
-# HowTo Discord Webhook 
 Information on how to set up a Discord webhook can be found be [here.](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
 
+# Usage
+That's it. Once the webhook(s) are created and the variables are filled in properly, you should be able to run the scripts and it send the relevant information to your Discord server/channel.
+
+I have set my scripts up to run as a Scheduled Task, so it's completely hands off.
+
 # Examples
-Tautulli_Monthly.ps1 - Whole Year in Monthly Stats.
-Chart will be created in Powershell without the need of Excel ("System.Windows.Forms.DataVisualization")
-This Script requires Powershell Core!!!
+CurrentStreams.ps1
+![DiscordCurrentlyStreaming.ps1](https://i.imgur.com/pDA3Tvs.png)
 
-![Tautulli_Monthly.ps1](https://i.imgur.com/Hnf5S6N.png)
+PopularOnPlex.ps1
+![PopularOnPlex.ps1](https://i.imgur.com/MpEhVWJ.png)
 
-Tautulli_Stats.ps1 - Top Everything
+LibraryStats.ps1
+![DiscordLibraryStats.ps1](https://i.imgur.com/ghONij6.png)
 
-![Media Stats](https://i.imgur.com/bWzEEUJ.png)
+PlaysForLast12Months_v2.ps1
+![DiscordPlaysForLast12Months_v2.ps1](https://i.imgur.com/NLqkeI2.png)
 
-Tautulli_Stats.ps1 - Concurrent Streams
+TopXUsersByMediaType.ps1
 
-![Streams](https://i.imgur.com/IKQxQwo.png)
+![DiscordTopXUsersByMediaType.ps1](https://i.imgur.com/0SNBXA9.png)
 
-Recently_Added.ps1 - Last x Days back -  Movies/Shows added to Plex.
+# Issues
+Probably. Just let me know and I will try to correct.
 
-![Recently_Added](https://i.imgur.com/znJh1Pw.png)
+# Thanks
+Many thanks to FS.Corrupt for his help and contributions. And thanks to Ladrek for coming up with some of the ideas for these scripts.
 
+# Enjoy
+This one is simple.
