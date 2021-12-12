@@ -1,2 +1,0 @@
-- name: MegaLinter
-  uses: megalinter/megalinter@v5.3.0
