@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/powershell:ubuntu-20.04
+FROM mcr.microsoft.com/powershell:ubuntu-22.04
 LABEL maintainer=fscorrupt
 LABEL org.opencontainers.image.source https://github.com/fscorrupt/Tautulli2Discord
 
