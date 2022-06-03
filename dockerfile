@@ -1,4 +1,4 @@
-FROM microsoft/powershell:latest
+FROM mcr.microsoft.com/powershell:latest
 LABEL maintainer=fscorrupt
 LABEL org.opencontainers.image.source https://github.com/fscorrupt/Tautulli2Discord
 
