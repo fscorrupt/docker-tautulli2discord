@@ -9,7 +9,7 @@
 
 # Log file path
 [string]$strStreamLogPath = "$PSScriptRoot\StreamLog.txt"
-[string]$strStreamLogPath = 'C:\Scripts\StreamLog.txt'
+#[string]$strStreamLogPath = 'C:\Scripts\StreamLog.txt'
 
 
 <############################################################
