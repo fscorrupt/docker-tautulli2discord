@@ -56,12 +56,11 @@ $json = @"
 
 $json | Out-File "$PSScriptRoot\config\config.json.template"
 
-cls
 # Show integraded Scripts
 $starttime = Get-Date
-
 $scripts =  (get-childitem -Filter *.ps1 | where name -ne 'welcome.ps1').Name.replace('.ps1','')
 
+cls
 Write-Host "Currently there are '$($scripts.count)' Scripts integrated" -ForegroundColor Yellow
 Write-Host  ''
 Write-Host "First fill out config here: " -ForegroundColor Yellow -NoNewline
