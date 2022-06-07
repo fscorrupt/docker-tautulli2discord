@@ -1,17 +1,24 @@
-function recurse { 
+function recurse {
+  cls
   sleep 60
-  echo "Running"
+  $elapsedTime = $(get-date) - $StartTime
+  $totalTime = $elapsedTime.Days.ToString() +' Days '+ $elapsedTime.Hours.ToString() +' Hours '+ $elapsedTime.Minutes.ToString() +' Min ' + $elapsedTime.Seconds.ToString() +' Sec'
+  write-host "Container is running since: " -NoNewline
+  write-host "$totalTime" -ForegroundColor Cyan
   recurse
 }
 
+cls
 # Show integraded Scripts
+$starttime = Get-Date
+
 $scripts =  (get-childitem -Filter *.ps1 | where name -ne 'welcome.ps1').Name.replace('.ps1','')
 
 Write-Host "Currently there are '$($scripts.count)' Scripts integrated" -ForegroundColor Yellow
 Write-Host  ''
 Write-Host "First fill out Config here: " -ForegroundColor Yellow -NoNewline
 Write-Host "/opt/appdata/tautulli2discord/config/config.json" -ForegroundColor Cyan 
-Write-Host "Example on how to run them:" -ForegroundColor Yellow -NoNewline
+Write-Host "Example on how to run them: " -ForegroundColor Yellow -NoNewline
 Write-Host "docker exec -it tautulli2discord pwsh PlexLibraryStats.ps1" -ForegroundColor Cyan
 Write-Host "####################################################" -ForegroundColor Green
 
