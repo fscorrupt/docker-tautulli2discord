@@ -87,9 +87,9 @@ RUN apk add --no-cache \
   while(!(Test-Path -Path \$env:PSModuleAnalysisCachePath)) {  \
   Write-Host "'Waiting for $env:PSModuleAnalysisCachePath'" ; \
   Start-Sleep -Seconds 6 ; \
-  } ; \
-  Install-Module PSReadLine -Force -SkipPublisherCheck -AllowPrerelease"
-
+  }"
+  
+RUN pwsh -c "Install-Module PSReadLine -Force -SkipPublisherCheck -AllowPrerelease"
 COPY *.ps1 .
 
 CMD [ "pwsh","./welcome.ps1" ]
