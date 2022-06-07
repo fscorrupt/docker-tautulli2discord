@@ -37,7 +37,7 @@ function Get-TMDBInfo {
    
    # Highly inaccurate method that relies on TMDB's ability to match the search title and year, but what other choice do I have?
    [string]$strMediaID = (Invoke-RestMethod -Method Get -Uri $strTMDB_URL).results[0].id
-   [object]$objResults = Invoke-RestMethod -Method Get -Uri "https://api.themoviedb.org/3/$($strMediaType)/$($strMediaID)?api_key=$($strAPIKey)&language=en-US"
+   [object]$objResults = Invoke-RestMethod -Method Get -Uri "https://api.themoviedb.org/3/$($strMediaType)/$($strMediaID)?api_key=$($strAPIKey)&language=en-US" -ErrorAction SilentlyContinue
    
    return $objResults
 }
@@ -125,11 +125,9 @@ function Push-ObjectToDiscord {
 [string]$strTautulliAPIKey = $objConfig.Tautulli.APIKey
 [string]$strTMDB_APIKey = $objConfig.TMDB.APIKey
 
-# Get PMS Identifier
+# Get and store data from Tautulli
 [object]$objPlexServerIdentifier = Invoke-RestMethod -Method Get -Uri "$strTautulliURL/api/v2?apikey=$strTautulliAPIKey&cmd=get_server_info"
 [string]$strPlexServerIdentifier = ($objPlexServerIdentifier.response.data | Select-Object -ExpandProperty pms_identifier)
-
-# Get and store data from Tautulli
 [object]$objDataResult = Invoke-RestMethod -Method Get -Uri "$strTautulliURL/api/v2?apikey=$strTautulliAPIKey&cmd=get_home_stats&grouping=1&time_range=$strDays&stats_count=$strCount"
 [array]$arrTopMovies = ($objDataResult.response.data | Where-Object -Property stat_id -eq "popular_movies").rows
 [array]$arrTopTVShows = ($objDataResult.response.data | Where-Object -Property stat_id -eq "popular_tv").rows
@@ -184,7 +182,7 @@ foreach ($movie in $arrTopMovies) {
             url = "https://app.plex.tv/desktop/#!/server/$strPlexServerIdentifier/details?key=%2Flibrary%2Fmetadata%2F$($movie.rating_key)"
             icon_url = "https://i.imgur.com/FNoiYXP.png"
          }
-         description = Get-SanitizedString -strInputString $($objTMDBMovieResults.overview)
+         description = Get-SanitizedString -strInputString $($objTMDBMovieResults.overview) -ErrorAction SilentlyContinue
          thumbnail = @{url = "https://image.tmdb.org/t/p/w500$($objTMDBMovieResults.poster_path)"}
          fields = @{
             name = 'Rating'
@@ -303,4 +301,4 @@ Push-ObjectToDiscord -strDiscordWebhook $strDiscordWebhook -objPayload $objMovie
    embeds = $arrTopTVShowsEmbed
 } | ConvertTo-Json -Depth 4
 
-Push-ObjectToDiscord -strDiscordWebhook $strDiscordWebhook -objPayload $objShowsPayload
+Push-ObjectToDiscord -strDiscordWebhook $strDiscordWebhook -objPayload $objShowsPayload 
