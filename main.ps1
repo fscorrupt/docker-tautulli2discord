@@ -1,1 +1,0 @@
-ls -Filter *.ps1
