@@ -125,10 +125,12 @@ function Push-ObjectToDiscord {
 [string]$strTautulliAPIKey = $objConfig.Tautulli.APIKey
 [string]$strTMDB_APIKey = $objConfig.TMDB.APIKey
 
-# Get and store data from Tautulli
+# Get PMS Identifier
 [object]$objPlexServerIdentifier = Invoke-RestMethod -Method Get -Uri "$strTautulliURL/api/v2?apikey=$strTautulliAPIKey&cmd=get_server_info"
-[object]$objDataResult = Invoke-RestMethod -Method Get -Uri "$strTautulliURL/api/v2?apikey=$strTautulliAPIKey&cmd=get_home_stats&grouping=1&time_range=$strDays&stats_count=$strCount"
 [string]$strPlexServerIdentifier = ($objPlexServerIdentifier.response.data | Select-Object -ExpandProperty pms_identifier)
+
+# Get and store data from Tautulli
+[object]$objDataResult = Invoke-RestMethod -Method Get -Uri "$strTautulliURL/api/v2?apikey=$strTautulliAPIKey&cmd=get_home_stats&grouping=1&time_range=$strDays&stats_count=$strCount"
 [array]$arrTopMovies = ($objDataResult.response.data | Where-Object -Property stat_id -eq "popular_movies").rows
 [array]$arrTopTVShows = ($objDataResult.response.data | Where-Object -Property stat_id -eq "popular_tv").rows
 
