@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/powershell:ubuntu-22.04
 LABEL maintainer=fscorrupt
 LABEL org.opencontainers.image.source https://github.com/fscorrupt/docker-tautulli2discord
 
-RUN apt-get update && apt-get install git -y && apt-get install -y apt-transport-https && apt-get update && apt-get install -y dotnet-sdk-6.0
+RUN apt-get update && apt-get install git -y && apt-get install apt-transport-https -y && apt-get install dotnet-sdk-6.0 -y
 RUN pwsh -c "Install-Module PSReadLine -Force -SkipPublisherCheck -AllowPrerelease"
 RUN mkdir /config
 
