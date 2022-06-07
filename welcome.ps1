@@ -69,14 +69,14 @@ $scripts =  (get-childitem -Filter *.ps1 | where name -ne 'welcome.ps1').Name.re
 Write-Host "##############################################################################" -ForegroundColor Green
 Write-Host "Currently '$($scripts.count)' scripts integrated" -ForegroundColor Yellow
 Write-Host  ''
-Write-Host "Please create 'config.json' based on template, located here: " -ForegroundColor Yellow -NoNewline
-Write-Host "/opt/appdata/tautulli2discord/config/config.json.template" -ForegroundColor Cyan 
-Write-Host "Fill out all informations in 'config.json'" -ForegroundColor Yellow
+Write-Host "Please create 'config.json' based on template, located here: " -ForegroundColor Yellow
+Write-Host "           /opt/appdata/tautulli2discord/config/config.json.template" -ForegroundColor Cyan 
+Write-Host "Please fill out all required informations in 'config.json'" -ForegroundColor Yellow
 Write-Host  ''
-Write-Host " - Example on how to run the script manually: " -ForegroundColor Yellow -NoNewline
-Write-Host "docker exec -it tautulli2discord pwsh PlexLibraryStats.ps1" -ForegroundColor Cyan
-Write-Host " - Example on how to run the script via cron: " -ForegroundColor Yellow -NoNewline
-Write-Host "* * * * * docker exec tautulli2discord pwsh CurrentStreams.ps1 >/dev/null 2>&1" -ForegroundColor Cyan
+Write-Host " - Example on how to run the script manually: " -ForegroundColor Yellow
+Write-Host "           docker exec -it tautulli2discord pwsh PlexLibraryStats.ps1" -ForegroundColor Cyan
+Write-Host " - Example on how to run the script via cron: " -ForegroundColor Yellow
+Write-Host "           * * * * * docker exec tautulli2discord pwsh CurrentStreams.ps1 >/dev/null 2>&1" -ForegroundColor Cyan
 Write-Host "##############################################################################" -ForegroundColor Green
 Write-Host  ''
 
