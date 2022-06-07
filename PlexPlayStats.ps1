@@ -7,7 +7,7 @@ $strPathToConfig = "$PSScriptRoot\config\config.json"
 $WebhookName = "TopPlexStats"
 
 # Path to where the chart image should be saved and sent from
-$ImagePath = "$PSScriptRoot\MonthlyStats.png"
+$ImagePath = "$PSScriptRoot\config\MonthlyStats.png"
 
 $SendScriptPath = "$PSScriptRoot\SendFileToDiscord.ps1"
 
