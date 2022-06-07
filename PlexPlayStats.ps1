@@ -1,4 +1,4 @@
-﻿Clear-Host
+Clear-Host
 
 # Enter the path to the config file for Tautulli and Discord
 $strPathToConfig = "$PSScriptRoot\config\config.json"
@@ -102,15 +102,6 @@ function CreateChart {
    $chart1.Series["TVPlays"].color = "#ED7D31"
    $objResult.TVPlays | ForEach-Object {$chart1.Series["TVPlays"].Points.addxy("TVPlays", $_) } | Out-Null
 # data series
-   [void]$chart1.Series.Add("MusicPlays")
-   $chart1.Series["MusicPlays"].ChartType = "Column"
-   $chart1.Series["MusicPlays"].BorderWidth  = 3
-   $chart1.Series["MusicPlays"].IsVisibleInLegend = $true
-   $chart1.Series["MusicPlays"].chartarea = "ChartArea1"
-   $chart1.Series["MusicPlays"].Legend = "Legend1"
-   $chart1.Series["MusicPlays"].color = "#A5A5A5"
-   $objResult.MusicPlays | ForEach-Object {$chart1.Series["MusicPlays"].Points.addxy("MusicPlays", $_) } | Out-Null
-# data series
    [void]$chart1.Series.Add("TotalPlays")
    $chart1.Series["TotalPlays"].ChartType = "Column"
    $chart1.Series["TotalPlays"].BorderWidth  = 3
@@ -133,7 +124,7 @@ $DataResult = Invoke-RestMethod -Method Get -Uri $apiURL
 $months = $dataResult.response.data.categories
 $Movieplays = ($dataResult.response.data.series | Where-Object -Property name -eq 'Movies').data
 $TVplays = ($dataResult.response.data.series | Where-Object -Property name -eq 'TV').data
-$Musicplays = ($dataResult.response.data.series | Where-Object -Property name -eq 'Music').data
+#$Musicplays = ($dataResult.response.data.series | Where-Object -Property name -eq 'Music').data
 $i = 0
 $objResult = @()
 
@@ -143,7 +134,7 @@ foreach($month in $months) {
       Month = $month
       MoviePlays = $Movieplays[$i]
       TVPlays = $TVplays[$i]
-      MusicPlays = $Musicplays[$i]
+      #MusicPlays = $Musicplays[$i]
       TotalPlays = $Movieplays[$i] + $TVplays[$i] + $Musicplays[$i]
    }
    
@@ -163,4 +154,4 @@ $body = $objResult | FT -AutoSize | Out-String
 SendStringToDiscord -title "**Monthly Plays:**" -body $body
 
 # Call $SendScriptPath to send the newly created image to Discord via PS v7
-& pswh -NoLogo -NonInteractive -ExecutionPolicy Bypass -File $SendScriptPath -FilePath $ImagePath -WebhookUrl $script:DiscordURL | Out-Null
+& pwsh -NoLogo -NonInteractive -ExecutionPolicy Bypass -File $SendScriptPath -FilePath $ImagePath -WebhookUrl $script:DiscordURL | Out-Null
