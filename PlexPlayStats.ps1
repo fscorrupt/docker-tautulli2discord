@@ -124,7 +124,6 @@ $DataResult = Invoke-RestMethod -Method Get -Uri $apiURL
 $months = $dataResult.response.data.categories
 $Movieplays = ($dataResult.response.data.series | Where-Object -Property name -eq 'Movies').data
 $TVplays = ($dataResult.response.data.series | Where-Object -Property name -eq 'TV').data
-#$Musicplays = ($dataResult.response.data.series | Where-Object -Property name -eq 'Music').data
 $i = 0
 $objResult = @()
 
@@ -135,7 +134,7 @@ foreach($month in $months) {
       MoviePlays = $Movieplays[$i]
       TVPlays = $TVplays[$i]
       #MusicPlays = $Musicplays[$i]
-      TotalPlays = $Movieplays[$i] + $TVplays[$i] + $Musicplays[$i]
+      TotalPlays = $Movieplays[$i] + $TVplays[$i]
    }
    
    # Add section data results to final object
