@@ -1,6 +1,6 @@
 function recurse {
+  sleep 180
   cls
-  sleep 60
   $elapsedTime = $(get-date) - $StartTime
   $totalTime = $elapsedTime.Days.ToString() +' Days '+ $elapsedTime.Hours.ToString() +' Hours '+ $elapsedTime.Minutes.ToString() +' Min ' + $elapsedTime.Seconds.ToString() +' Sec'
   write-host "Container is running since: " -NoNewline
