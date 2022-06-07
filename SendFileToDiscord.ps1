@@ -1,15 +1,11 @@
 ﻿[cmdletbinding()]
 param(
-   [Parameter()]
+   [Parameter(Mandatory)]
    [string]
    $WebhookUrl,
    
-   [Parameter(
-      Mandatory,
-      ParameterSetName = 'file'
-   )]
-   [string]
-   $FilePath
+   [Parameter(Mandatory, ParameterSetName = 'file')]
+   [string]$FilePath
 )
 
 class DiscordFile {
@@ -44,9 +40,7 @@ class DiscordFile {
 function Invoke-PayloadBuilder {
    [cmdletbinding()]
    param(
-      [Parameter(
-         Mandatory
-      )]
+      [Parameter(Mandatory)]
       $PayloadObject
    )
    
@@ -54,13 +48,12 @@ function Invoke-PayloadBuilder {
       $type = $PayloadObject | Get-Member | Select-Object -ExpandProperty TypeName -Unique
       switch ($type) {
          'DiscordEmbed' {
-            [bool]$createArray = $true
+            [boolean]$createArray = $true
             
             #check if array
             $PayloadObject.PSObject.TypeNames | ForEach-Object {
-               switch ($_) {
-                  {$_ -match '^System\.Collections\.Generic\.List.+'} {
-                     
+               switch -Regex ($_) {
+                  '^System\.Collections\.Generic\.List.+' {
                      $createArray = $false
                   }
                   'System.Array' {
@@ -72,21 +65,20 @@ function Invoke-PayloadBuilder {
                }
             }
             
-            if (!$createArray) {
+            if (-not ($createArray)) {
                $payload = [PSCustomObject]@{
                   embeds = $PayloadObject
                }
-            } 
+            }
             else {
                $embedArray = New-Object 'System.Collections.Generic.List[DiscordEmbed]'
-               $embedArray.Add($PayloadObject) | Out-Null
+               $null = $embedArray.Add($PayloadObject)
                
                $payload = [PSCustomObject]@{
                   embeds = $embedArray
                }
             }
          }
-         
          'System.String' {
             if (Test-Path $PayloadObject -ErrorAction SilentlyContinue) {
                $payload = [DiscordFile]::New($payloadObject)
@@ -99,7 +91,6 @@ function Invoke-PayloadBuilder {
          }
       }
    }
-   
    end {
       return $payload
    }
@@ -108,47 +99,26 @@ function Invoke-PayloadBuilder {
 function Invoke-PSDsHook {
    [cmdletbinding()]
    param(
-      [Parameter(
-         ParameterSetName = 'createDsConfig'
-      )]
-      [string]
-      $CreateConfig,
+      [Parameter(ParameterSetName = 'createDsConfig')]
+      [string]$CreateConfig,
       
-      [Parameter(
-      )]
-      [string]
-      $WebhookUrl,
+      [Parameter()]
+      [string]$WebhookUrl,
       
-      [Parameter(
-         Mandatory,
-         ParameterSetName = 'file'
-      )]
-      [string]
-      $FilePath,
+      [Parameter(Mandatory,ParameterSetName = 'file')]
+      [string]$FilePath,
       
-      [Parameter(
+      [Parameter()]
+      [string]$ConfigName = 'config',
       
-      )]
-      [string]
-      $ConfigName = 'config',
+      [Parameter(ParameterSetName = 'configList')]
+      [switch]$ListConfigs,
       
-      [Parameter(
-         ParameterSetName = 'configList'
-      )]
-      [switch]
-      $ListConfigs,
-      
-      [Parameter(
-         ParameterSetName = 'embed',
-         Position = 0
-      )]
+      [Parameter(ParameterSetName = 'embed', Position = 0)]
       $EmbedObject,
       
-      [Parameter(
-         ParameterSetName = 'simple'
-      )]
-      [string]
-      $HookText
+      [Parameter(ParameterSetName = 'simple')]
+      [string]$HookText
    )
    
    begin {
@@ -249,5 +219,5 @@ function Invoke-PSDsHook {
    }
 }
 
-# Finally, call the function that will send the embed array to the webhook url via the default configuration file
+# Call the function that will send the embed array to the webhook URL via the default configuration file
 Invoke-PSDsHook -FilePath $FilePath -WebhookUrl $WebhookUrl

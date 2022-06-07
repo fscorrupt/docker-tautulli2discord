@@ -1,23 +1,45 @@
 ﻿Clear-Host
 
 # Enter the path to the config file for Tautulli and Discord
-[string]$strPathToConfig = "$PSScriptRoot\config.json"
-#[string]$strPathToConfig = 'C:\Scripts\config.json' # Used only during testing
-
-# Discord webhook name. This should match the webhook name in the INI file under "[Webhooks]".
-[string]$strWebhookName = 'CurrentStreams'
+[string]$strPathToConfig = "$PSScriptRoot\config\config.json"
 
 # Log file path
-[string]$strStreamLogPath = "$PSScriptRoot\StreamLog.txt"
-#[string]$strStreamLogPath = 'C:\Scripts\StreamLog.txt'
+[string]$strStreamLogPath = "$PSScriptRoot\config\log\StreamLog.txt"
 
+# Script name MUST match what is in config.json under "ScriptSettings"
+[string]$strScriptName = 'CurrentStreams'
 
 <############################################################
 Do NOT edit lines below unless you know what you are doing!
 ############################################################>
 
 # Define the functions to be used
-function Get-SanitizedString ([string]$strInputString) {
+function Get-TMDBInfo {
+   [CmdletBinding()]
+   param(
+      [Parameter(Mandatory)]
+      [ValidateNotNullOrEmpty()]
+      [string]$strAPIKey,
+      
+      [Parameter(Mandatory)]
+      [ValidateSet('tv', 'movie')]
+      [string]$strMediaType,
+      
+      [Parameter(Mandatory)]
+      [ValidateNotNullOrEmpty()]
+      [string]$strTMDB_ID
+   )
+   [object]$objResults = Invoke-RestMethod -Method Get -Uri "https://api.themoviedb.org/3/$($strMediaType)/$($strTMDB_ID)?api_key=$($strAPIKey)&language=en-US"
+   
+   return $objResults
+}
+function Get-SanitizedString {
+   [CmdletBinding()]
+   param(
+      [Parameter(Mandatory)]
+      [ValidateNotNullOrEmpty()]
+      [string]$strInputString
+   )
    # Credit to FS.Corrupt for the initial version of this function. https://github.com/FSCorrupt
    [regex]$regAppendedYear = ' \(([0-9]{4})\)' # This will match any titles with the year appended. I ran into issues with 'Yellowstone (2018)'
    [hashtable]$htbReplaceValues = @{
@@ -54,9 +76,9 @@ function Get-SanitizedString ([string]$strInputString) {
       'þ' = 'p'
       'ÿ' = 'y'
       '“' = '"'
-      '·' = ' '
+      '”' = '"'
+      '·' = '-'
       ':' = ''
-      '-' = ' '
       $regAppendedYear = ''
    }
    
@@ -65,15 +87,19 @@ function Get-SanitizedString ([string]$strInputString) {
    }
    return $strInputString
 }
-function Get-TMDBInfo ([string]$strAPIKey, [ValidateSet('tv', 'movie')][string]$strMediaType, [string]$strTMDB_ID) {
-   [string]$strTMDB_URL = "https://api.themoviedb.org/3/$($strMediaType)/$($strTMDB_ID)?api_key=$($strTMDB_APIKey)&language=en-US"
-   [object]$objResults = Invoke-RestMethod -Method Get -Uri $strTMDB_URL
-   
-   return $objResults
-}
-function Push-ObjectToDiscord([string]$strDiscordWebhook, [object]$objPayload) {
+function Push-ObjectToDiscord {
+   [CmdletBinding()]
+   param(
+      [Parameter(Mandatory)]
+      [ValidateNotNullOrEmpty()]
+      [string]$strDiscordWebhook,
+      
+      [Parameter(Mandatory)]
+      [ValidateNotNullOrEmpty()]
+      [object]$objPayload
+   )
    try {
-      Invoke-RestMethod -Method Post -Uri $strDiscordWebhook -Body $objPayload -ContentType 'Application/Json'
+      $null = Invoke-RestMethod -Method Post -Uri $strDiscordWebhook -Body $objPayload -ContentType 'Application/Json'
       Start-Sleep -Seconds 1
    }
    catch {
@@ -84,21 +110,33 @@ function Push-ObjectToDiscord([string]$strDiscordWebhook, [object]$objPayload) {
 
 # Parse the config file and assign variables
 [object]$objConfig = Get-Content -Path $strPathToConfig -Raw | ConvertFrom-Json
-[string]$strDiscordWebhook = $objConfig.Webhooks.$strWebhookName
+[string]$strDiscordWebhook = $objConfig.ScriptSettings.$strScriptName.Webhook
 [string]$strTautulliURL = $objConfig.Tautulli.URL
-[string]$apiKey = $objConfig.Tautulli.APIKey
+[string]$strTautulliAPIKey = $objConfig.Tautulli.APIKey
 [string]$strTMDB_APIKey = $objConfig.TMDB.APIKey
-[string]$strTautulliAPI_URL = "$strTautulliURL/api/v2?apikey=$apiKey&cmd=get_activity"
-[object]$objCurrentActivity = Invoke-RestMethod -Method Get -Uri $strTautulliAPI_URL
-[array]$arrCurrentStreams = $objCurrentActivity.response.data.sessions
+
+# Attempt to get Plex activity from Tautulli
+try {
+   [object]$objCurrentActivity = Invoke-RestMethod -Method Get -Uri "$strTautulliURL/api/v2?apikey=$strTautulliAPIKey&cmd=get_activity"
+   [array]$arrCurrentStreams = $objCurrentActivity.response.data.sessions
+}
+catch {
+   [object]$objPayload = @{
+      username = "Current Streams"
+      content = "**Could not get current streams from Tautulli.**`nError message:`n$($_)"
+   } | ConvertTo-Json -Depth 4
+   
+   Push-ObjectToDiscord -strDiscordWebhook $strDiscordWebhook -objPayload $objPayload
+   exit
+}
 
 # Loop through each stream
 [System.Collections.ArrayList]$arrCurrentStreamsEmbed = @()
 foreach ($stream in $arrCurrentStreams) {
-   $strSanitizedTitle = Get-SanitizedString -strInputString $stream.grandparent_title
+   [string]$strSanitizedTitle = Get-SanitizedString -strInputString $stream.title
    # TV
-   if ($stream.media_type -eq "episode") {
-      [string]$strTMDB_ID = ($stream.guids[1]).Split('/')[2]
+   if ($stream.media_type -eq 'episode') {
+      [string]$strTMDB_ID = ($stream.guids | Where-Object {$_ -match 'tmdb'}).Split('/')[2]
       [object]$objTMDBResults = Get-TMDBInfo -strAPIKey $strTMDB_APIKey -strMediaType tv -strTMDB_ID $strTMDB_ID
       
       [hashtable]$htbEmbedParameters = @{
@@ -110,8 +148,8 @@ foreach ($stream in $arrCurrentStreams) {
             url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F$($stream.grandparent_rating_key)"
             icon_url = 'https://styles.redditmedia.com/t5_2ql7e/styles/communityIcon_mdwl2x2rtzb11.png?width=256&s=14a77880afea69b1dac1b0f14dc52b09c492b775'
          }
-         description = $stream.summary
-         thumbnail = @{url = "https://image.tmdb.org/t/p/w500" + $($objTMDBResults.poster_path)}
+         description = Get-SanitizedString -strInputString $stream.summary
+         thumbnail = @{url = "https://image.tmdb.org/t/p/w500$($objTMDBResults.poster_path)"}
          fields = @{
             name = 'User'
             value = $stream.friendly_name
@@ -141,7 +179,7 @@ foreach ($stream in $arrCurrentStreams) {
             url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F$($stream.rating_key)"
             icon_url = 'https://styles.redditmedia.com/t5_2ql7e/styles/communityIcon_mdwl2x2rtzb11.png?width=256&s=14a77880afea69b1dac1b0f14dc52b09c492b775'
          }
-         description = $stream.summary
+         description = Get-SanitizedString -strInputString $stream.summary
          fields = @{
             name = 'User'
             value = $stream.friendly_name
@@ -175,7 +213,7 @@ foreach ($stream in $arrCurrentStreams) {
             url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F$($stream.rating_key)"
             icon_url = 'https://styles.redditmedia.com/t5_2ql7e/styles/communityIcon_mdwl2x2rtzb11.png?width=256&s=14a77880afea69b1dac1b0f14dc52b09c492b775'
          }
-         description = $stream.summary
+         description = Get-SanitizedString -strInputString $stream.summary
          thumbnail = @{url = "https://image.tmdb.org/t/p/w500$($objTMDBResults.poster_path)"}
          fields = @{
             name = 'User'
@@ -201,7 +239,11 @@ foreach ($stream in $arrCurrentStreams) {
    $null = $arrCurrentStreamsEmbed.Add($htbEmbedParameters)
 }
 
-[object]$objPayload = $arrCurrentStreamsEmbed | ConvertTo-Json -Depth 4
+[object]$objPayload = @{
+   username = "Current Streams"
+   content = "**Current Streams on Plex:**"
+   embeds = $arrCurrentStreamsEmbed
+} | ConvertTo-Json -Depth 4
 
 if (!(Test-Path $strStreamLogPath)) { # Log file doesn't exist. Create it and update Discord
    # Create the log file

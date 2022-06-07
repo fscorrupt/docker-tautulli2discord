@@ -1,25 +1,39 @@
 ﻿Clear-Host
 
 # Enter the path to the config file for Tautulli and Discord
-[string]$strPathToConfig = "$PSScriptRoot\config.json"
-#[string]$strPathToConfig = 'C:\Scripts\config.json' # Used only during testing
+[string]$strPathToConfig = "$PSScriptRoot\config\config.json"
 
-# Discord webhook name. This should match the webhook name in the INI file under "[Webhooks]".
-[string]$strWebhookName = 'PopularOnPlex'
-
-# Top Play Movie/Show Count
-[string]$strCount = '5'
-
-# How many Days do you want to look Back?
-[string]$strDays = '30'
+# Script name MUST match what is in config.json under "ScriptSettings"
+[string]$strScriptName = 'PopularOnPlex'
 
 <############################################################
 Do NOT edit lines below unless you know what you are doing!
 ############################################################>
 
 # Define the functions to be used
-function Get-TMDBInfo ([string]$strAPIKey, [ValidateSet('tv', 'movie')][string]$strMediaType, [string]$strTitle, [string]$strYear) {
-   [string]$strTMDB_URL = "https://api.themoviedb.org/3/search/$($strMediaType)?api_key=$($strAPIKey)&language=en-US&page=1&include_adult=false&year=$($strYear)&query=$strTitle"
+function Get-TMDBInfo {
+   [CmdletBinding()]
+   param(
+      [Parameter(Mandatory)]
+      [ValidateNotNullOrEmpty()]
+      [string]$strAPIKey,
+      
+      [Parameter(Mandatory)]
+      [ValidateSet('tv', 'movie')]
+      [string]$strMediaType,
+      
+      [Parameter(Mandatory)]
+      [ValidateNotNullOrEmpty()]
+      [string]$strTitle,
+      
+      [Parameter()]
+      [string]$strYear
+   )
+   [string]$strTMDB_URL = "https://api.themoviedb.org/3/search/$($strMediaType)?api_key=$($strAPIKey)&language=en-US&page=1&include_adult=false&query=$strTitle"
+   
+   if (($null -ne $strYear) -and ($strYear -ne '')) {
+      $strTMDB_URL = "$($strTMDB_URL)&year=$($strYear)"
+   }
    
    # Highly inaccurate method that relies on TMDB's ability to match the search title and year, but what other choice do I have?
    [string]$strMediaID = (Invoke-RestMethod -Method Get -Uri $strTMDB_URL).results[0].id
@@ -27,7 +41,13 @@ function Get-TMDBInfo ([string]$strAPIKey, [ValidateSet('tv', 'movie')][string]$
    
    return $objResults
 }
-function Get-SanitizedString ([string]$strInputString) {
+function Get-SanitizedString {
+   [CmdletBinding()]
+   param(
+      [Parameter(Mandatory)]
+      [ValidateNotNullOrEmpty()]
+      [string]$strInputString
+   )
    # Credit to FS.Corrupt for the initial version of this function. https://github.com/FSCorrupt
    [regex]$regAppendedYear = ' \(([0-9]{4})\)' # This will match any titles with the year appended. I ran into issues with 'Yellowstone (2018)'
    [hashtable]$htbReplaceValues = @{
@@ -64,6 +84,7 @@ function Get-SanitizedString ([string]$strInputString) {
       'þ' = 'p'
       'ÿ' = 'y'
       '“' = '"'
+      '”' = '"'
       '·' = '-'
       ':' = ''
       $regAppendedYear = ''
@@ -74,9 +95,19 @@ function Get-SanitizedString ([string]$strInputString) {
    }
    return $strInputString
 }
-function Push-ObjectToDiscord([string]$strDiscordWebhook, [object]$objPayload) {
+function Push-ObjectToDiscord {
+   [CmdletBinding()]
+   param(
+      [Parameter(Mandatory)]
+      [ValidateNotNullOrEmpty()]
+      [string]$strDiscordWebhook,
+      
+      [Parameter(Mandatory)]
+      [ValidateNotNullOrEmpty()]
+      [object]$objPayload
+   )
    try {
-      Invoke-RestMethod -Method Post -Uri $strDiscordWebhook -Body $objPayload -ContentType 'Application/Json'
+      $null = Invoke-RestMethod -Method Post -Uri $strDiscordWebhook -Body $objPayload -ContentType 'Application/Json'
       Start-Sleep -Seconds 1
    }
    catch {
@@ -87,14 +118,15 @@ function Push-ObjectToDiscord([string]$strDiscordWebhook, [object]$objPayload) {
 
 # Parse the config file and assign variables
 [object]$objConfig = Get-Content -Path $strPathToConfig -Raw | ConvertFrom-Json
-[string]$strDiscordWebhook = $objConfig.Webhooks.$strWebhookName
+[string]$strDiscordWebhook = $objConfig.ScriptSettings.$strScriptName.Webhook
+[string]$strCount = $objConfig.ScriptSettings.$strScriptName.Count
+[string]$strDays = $objConfig.ScriptSettings.$strScriptName.Days
 [string]$strTautulliURL = $objConfig.Tautulli.URL
 [string]$strTautulliAPIKey = $objConfig.Tautulli.APIKey
 [string]$strTMDB_APIKey = $objConfig.TMDB.APIKey
 
-# Complete API URL
-[string]$strTautulliAPI_URL = "$strTautulliURL/api/v2?apikey=$strTautulliAPIKey&cmd=get_home_stats&grouping=1&time_range=$strDays&stats_count=$strCount"
-[object]$objDataResult = Invoke-RestMethod -Method Get -Uri $strTautulliAPI_URL
+# Get and store data from Tautulli
+[object]$objDataResult = Invoke-RestMethod -Method Get -Uri "$strTautulliURL/api/v2?apikey=$strTautulliAPIKey&cmd=get_home_stats&grouping=1&time_range=$strDays&stats_count=$strCount"
 [array]$arrTopMovies = ($objDataResult.response.data | Where-Object -Property stat_id -eq "popular_movies").rows
 [array]$arrTopTVShows = ($objDataResult.response.data | Where-Object -Property stat_id -eq "popular_tv").rows
 
@@ -111,7 +143,7 @@ foreach ($movie in $arrTopMovies) {
       [hashtable]$htbMovieEmbedParameters = @{
          color = '13400320'
          title = $strSanitizedMovieTitle
-         url = "https://www.themoviedb.org/movie/"
+         url = 'https://www.themoviedb.org/movie/'
          author = @{
             name = "Open on Plex"
             url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F" + $movie.rating_key
@@ -181,14 +213,14 @@ foreach ($show in $arrTopTVShows) {
       [hashtable]$htbEmbedParameters = @{
          color = '40635'
          title = $strSanitizedShowTitle
-         url = "https://www.themoviedb.org/movie/$($json.id)"
+         #url = "https://www.themoviedb.org/movie/$($objTMDBTVResults.id)"
          author = @{
             name = "Open on Plex"
-            url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F" + $movie.rating_key
-            icon_url = "https://styles.redditmedia.com/t5_2ql7e/styles/communityIcon_mdwl2x2rtzb11.png?width=256&s=14a77880afea69b1dac1b0f14dc52b09c492b775"
+            url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F$($show.rating_key)"
+            icon_url = 'https://styles.redditmedia.com/t5_2ql7e/styles/communityIcon_mdwl2x2rtzb11.png?width=256&s=14a77880afea69b1dac1b0f14dc52b09c492b775'
          }
          description = "Unknown"
-         thumbnail = @{url = "https://image.tmdb.org/t/p/w500" + $($json.poster_path)}
+         #thumbnail = @{url = "https://image.tmdb.org/t/p/w500$($objTMDBTVResults.poster_path)"}
          fields = @{
             name = 'Rating'
             value = "??? :star:'s"
@@ -223,7 +255,6 @@ foreach ($show in $arrTopTVShows) {
             icon_url = "https://styles.redditmedia.com/t5_2ql7e/styles/communityIcon_mdwl2x2rtzb11.png?width=256&s=14a77880afea69b1dac1b0f14dc52b09c492b775"
          }
          description = Get-SanitizedString -strInputString $objTMDBTVResults.overview
-         #description = "Descriptions are broken. Can't figure it out."
          thumbnail = @{url = "https://image.tmdb.org/t/p/w500$($objTMDBTVResults.poster_path)"}
          fields = @{
             name = 'Rating'
