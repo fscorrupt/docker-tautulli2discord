@@ -147,7 +147,7 @@ foreach ($movie in $arrTopMovies) {
          author = @{
             name = "Open on Plex"
             url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F" + $movie.rating_key
-            icon_url = "https://i.imgur.com/smorfDf.png"
+            icon_url = "https://i.imgur.com/FNoiYXP.png"
          }
          description = "Unknown"
          thumbnail = @{url = "https://www.programmableweb.com/sites/default/files/TMDb.jpg"}
@@ -178,7 +178,7 @@ foreach ($movie in $arrTopMovies) {
          author = @{
             name = "Open on Plex"
             url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F$($movie.rating_key)"
-            icon_url = "https://i.imgur.com/smorfDf.png"
+            icon_url = "https://i.imgur.com/FNoiYXP.png"
          }
          description = Get-SanitizedString -strInputString $($objTMDBMovieResults.overview)
          thumbnail = @{url = "https://image.tmdb.org/t/p/w500$($objTMDBMovieResults.poster_path)"}
@@ -217,7 +217,7 @@ foreach ($show in $arrTopTVShows) {
          author = @{
             name = "Open on Plex"
             url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F$($show.rating_key)"
-            icon_url = 'https://i.imgur.com/smorfDf.png'
+            icon_url = 'https://i.imgur.com/FNoiYXP.png'
          }
          description = "Unknown"
          #thumbnail = @{url = "https://image.tmdb.org/t/p/w500$($objTMDBTVResults.poster_path)"}
@@ -252,7 +252,7 @@ foreach ($show in $arrTopTVShows) {
          author = @{
             name = "Open on Plex"
             url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F$($show.rating_key)"
-            icon_url = "https://i.imgur.com/smorfDf.png"
+            icon_url = "https://i.imgur.com/FNoiYXP.png"
          }
          description = Get-SanitizedString -strInputString $objTMDBTVResults.overview
          thumbnail = @{url = "https://image.tmdb.org/t/p/w500$($objTMDBTVResults.poster_path)"}
