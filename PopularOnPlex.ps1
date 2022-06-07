@@ -1,7 +1,7 @@
 ﻿Clear-Host
 
 # Enter the path to the config file for Tautulli and Discord
-[string]$strPathToConfig = "$PSScriptRoot\config\config.json"
+[string]$strPathToConfig = ".\config\config.json"
 
 # Script name MUST match what is in config.json under "ScriptSettings"
 [string]$strScriptName = 'PopularOnPlex'
