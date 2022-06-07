@@ -6,6 +6,6 @@ RUN apt-get update && apt-get install git -y
 RUN pwsh -c "Install-Module PSReadLine -Force -SkipPublisherCheck -AllowPrerelease"
 RUN mkdir /config
 COPY *.ps1 .
-COPY config.json.template /config
+COPY config.json.template ./config
 
 CMD [ "pwsh","./welcome.ps1" ]
