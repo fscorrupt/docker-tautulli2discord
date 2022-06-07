@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/powershell
+FROM mcr.microsoft.com/windows/servercore:ltsc2019
 LABEL maintainer=fscorrupt
 LABEL org.opencontainers.image.source https://github.com/fscorrupt/docker-tautulli2discord
 
