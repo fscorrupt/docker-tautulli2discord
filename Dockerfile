@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/powershell:alpine-3.15
+FROM mcr.microsoft.com/powershell:7.2.2-alpine-3.14-20220318
 LABEL maintainer=fscorrupt
 LABEL org.opencontainers.image.source https://github.com/fscorrupt/docker-tautulli2discord
 
