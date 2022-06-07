@@ -148,7 +148,7 @@ foreach ($movie in $arrTopMovies) {
          url = 'https://www.themoviedb.org/movie/'
          author = @{
             name = "Open on Plex"
-            url = "https://app.plex.tv/desktop/#!/server/$strPlexServerIdentifier/details?key=%2Flibrary%2Fmetadata%2F" + $movie.rating_key
+            url = "https://app.plex.tv/desktop/#!/server/$strPlexServerIdentifier/details?key=%2Flibrary%2Fmetadata%2F$($movie.rating_key)"
             icon_url = "https://i.imgur.com/FNoiYXP.png"
          }
          description = "Unknown"
