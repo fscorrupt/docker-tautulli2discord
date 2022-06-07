@@ -177,4 +177,4 @@ $strBody
 Push-ObjectToDiscord -strDiscordWebhook $strDiscordWebhook -objPayload $objPayload
 
 # Call $strSendScriptFilePath to send the newly created image to Discord via PS v6+
-$null = & $strSendScriptFilePath -FilePath $strImagePath -WebhookUrl $strDiscordWebhook
+$null = & pwsh -NoLogo -NonInteractive -ExecutionPolicy Bypass -File $strSendScriptFilePath -FilePath $strImagePath -WebhookUrl $strDiscordWebhook
