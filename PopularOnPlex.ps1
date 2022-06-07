@@ -7,7 +7,7 @@
 [string]$strScriptName = 'PopularOnPlex'
 
 <############################################################
-Do NOT edit lines below unless you know what you are doing!
+    Do NOT edit lines below unless you know what you are doing!
 ############################################################>
 
 # Define the functions to be used
@@ -126,7 +126,9 @@ function Push-ObjectToDiscord {
 [string]$strTMDB_APIKey = $objConfig.TMDB.APIKey
 
 # Get and store data from Tautulli
+[object]$objPlexServerIdentifier = Invoke-RestMethod -Method Get -Uri "$strTautulliURL/api/v2?apikey=$strTautulliAPIKey&cmd=get_server_info"
 [object]$objDataResult = Invoke-RestMethod -Method Get -Uri "$strTautulliURL/api/v2?apikey=$strTautulliAPIKey&cmd=get_home_stats&grouping=1&time_range=$strDays&stats_count=$strCount"
+[string]$strPlexServerIdentifier = ($objPlexServerIdentifier.response.data | Select-Object -ExpandProperty pms_identifier)
 [array]$arrTopMovies = ($objDataResult.response.data | Where-Object -Property stat_id -eq "popular_movies").rows
 [array]$arrTopTVShows = ($objDataResult.response.data | Where-Object -Property stat_id -eq "popular_tv").rows
 
@@ -146,7 +148,7 @@ foreach ($movie in $arrTopMovies) {
          url = 'https://www.themoviedb.org/movie/'
          author = @{
             name = "Open on Plex"
-            url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F" + $movie.rating_key
+            url = "https://app.plex.tv/desktop/#!/server/$strPlexServerIdentifier/details?key=%2Flibrary%2Fmetadata%2F" + $movie.rating_key
             icon_url = "https://i.imgur.com/FNoiYXP.png"
          }
          description = "Unknown"
@@ -177,7 +179,7 @@ foreach ($movie in $arrTopMovies) {
          url = "https://www.themoviedb.org/movie/$($objTMDBMovieResults.id)"
          author = @{
             name = "Open on Plex"
-            url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F$($movie.rating_key)"
+            url = "https://app.plex.tv/desktop/#!/server/$strPlexServerIdentifier/details?key=%2Flibrary%2Fmetadata%2F$($movie.rating_key)"
             icon_url = "https://i.imgur.com/FNoiYXP.png"
          }
          description = Get-SanitizedString -strInputString $($objTMDBMovieResults.overview)
@@ -216,7 +218,7 @@ foreach ($show in $arrTopTVShows) {
          #url = "https://www.themoviedb.org/movie/$($objTMDBTVResults.id)"
          author = @{
             name = "Open on Plex"
-            url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F$($show.rating_key)"
+            url = "https://app.plex.tv/desktop/#!/server/$strPlexServerIdentifier/details?key=%2Flibrary%2Fmetadata%2F$($show.rating_key)"
             icon_url = 'https://i.imgur.com/FNoiYXP.png'
          }
          description = "Unknown"
@@ -251,7 +253,7 @@ foreach ($show in $arrTopTVShows) {
          url = "https://www.themoviedb.org/tv/$($objTMDBTVResults.id)"
          author = @{
             name = "Open on Plex"
-            url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F$($show.rating_key)"
+            url = "https://app.plex.tv/desktop/#!/server/$strPlexServerIdentifier/details?key=%2Flibrary%2Fmetadata%2F$($show.rating_key)"
             icon_url = "https://i.imgur.com/FNoiYXP.png"
          }
          description = Get-SanitizedString -strInputString $objTMDBTVResults.overview

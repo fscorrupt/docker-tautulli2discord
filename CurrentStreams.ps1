@@ -10,7 +10,7 @@
 [string]$strScriptName = 'CurrentStreams'
 
 <############################################################
-Do NOT edit lines below unless you know what you are doing!
+    Do NOT edit lines below unless you know what you are doing!
 ############################################################>
 
 # Define the functions to be used
@@ -116,6 +116,9 @@ function Push-ObjectToDiscord {
 [string]$strTMDB_APIKey = $objConfig.TMDB.APIKey
 
 # Attempt to get Plex activity from Tautulli
+[object]$objPlexServerIdentifier = Invoke-RestMethod -Method Get -Uri "$strTautulliURL/api/v2?apikey=$strTautulliAPIKey&cmd=get_server_info"
+[string]$strPlexServerIdentifier = ($objPlexServerIdentifier.response.data | Select-Object -ExpandProperty pms_identifier)
+
 try {
    [object]$objCurrentActivity = Invoke-RestMethod -Method Get -Uri "$strTautulliURL/api/v2?apikey=$strTautulliAPIKey&cmd=get_activity"
    [array]$arrCurrentStreams = $objCurrentActivity.response.data.sessions
@@ -145,7 +148,7 @@ foreach ($stream in $arrCurrentStreams) {
          url = "https://www.themoviedb.org/tv/$strTMDB_ID"
          author = @{
             name = 'Open on Plex'
-            url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F$($stream.grandparent_rating_key)"
+            url = "https://app.plex.tv/desktop/#!/server/$strPlexServerIdentifier/details?key=%2Flibrary%2Fmetadata%2F$($stream.grandparent_rating_key)"
             icon_url = 'https://i.imgur.com/FNoiYXP.png'
          }
          description = Get-SanitizedString -strInputString $stream.summary
@@ -176,7 +179,7 @@ foreach ($stream in $arrCurrentStreams) {
          title = $strSanitizedTitle
          author = @{
             name = 'Open on Plex'
-            url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F$($stream.rating_key)"
+            url = "https://app.plex.tv/desktop/#!/server/$strPlexServerIdentifier/details?key=%2Flibrary%2Fmetadata%2F$($stream.rating_key)"
             icon_url = 'https://i.imgur.com/FNoiYXP.png'
          }
          description = Get-SanitizedString -strInputString $stream.summary
@@ -210,7 +213,7 @@ foreach ($stream in $arrCurrentStreams) {
          url = "https://www.themoviedb.org/movie/$strTMDB_ID"
          author = @{
             name = "Open on Plex"
-            url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F$($stream.rating_key)"
+            url = "https://app.plex.tv/desktop/#!/server/$strPlexServerIdentifier/details?key=%2Flibrary%2Fmetadata%2F$($stream.rating_key)"
             icon_url = 'https://i.imgur.com/FNoiYXP.png'
          }
          description = Get-SanitizedString -strInputString $stream.summary
