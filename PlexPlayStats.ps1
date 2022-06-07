@@ -1,4 +1,4 @@
-﻿Clear-Host
+Clear-Host
 
 <############################################################
 Note - For this script to send files to Discord, you must
@@ -131,7 +131,6 @@ function New-ChartImage {
 # Parse the config file and assign variables
 [object]$objConfig = Get-Content -Path $strPathToConfig -Raw | ConvertFrom-Json
 [string]$strDiscordWebhook = $objConfig.ScriptSettings.$strScriptName.Webhook
-[string]$strPSCoreFilePath = $objConfig.ScriptSettings.$strScriptName.PSCoreFilePath
 [string]$strTautulliURL = $objConfig.Tautulli.URL
 [string]$strTautulliAPIKey = $objConfig.Tautulli.APIKey
 [object]$objPlaysPerMonth = Invoke-RestMethod -Method Get -Uri "$strTautulliURL/api/v2?apikey=$strTautulliAPIKey&cmd=get_plays_per_month"
@@ -177,7 +176,5 @@ $strBody
 } | ConvertTo-Json -Depth 4
 Push-ObjectToDiscord -strDiscordWebhook $strDiscordWebhook -objPayload $objPayload
 
-if (Test-Path $strPSCoreFilePath) {
-   # Call $strSendScriptFilePath to send the newly created image to Discord via PS v6+
-   $null = & $strSendScriptFilePath -FilePath $strImagePath -WebhookUrl $strDiscordWebhook
-}
+# Call $strSendScriptFilePath to send the newly created image to Discord via PS v6+
+$null = & $strSendScriptFilePath -FilePath $strImagePath -WebhookUrl $strDiscordWebhook
