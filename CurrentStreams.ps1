@@ -115,10 +115,11 @@ function Push-ObjectToDiscord {
 [string]$strTautulliAPIKey = $objConfig.Tautulli.APIKey
 [string]$strTMDB_APIKey = $objConfig.TMDB.APIKey
 
-# Attempt to get Plex activity from Tautulli
+# Get PMS Identifier
 [object]$objPlexServerIdentifier = Invoke-RestMethod -Method Get -Uri "$strTautulliURL/api/v2?apikey=$strTautulliAPIKey&cmd=get_server_info"
 [string]$strPlexServerIdentifier = ($objPlexServerIdentifier.response.data | Select-Object -ExpandProperty pms_identifier)
 
+# Attempt to get Plex activity from Tautulli
 try {
    [object]$objCurrentActivity = Invoke-RestMethod -Method Get -Uri "$strTautulliURL/api/v2?apikey=$strTautulliAPIKey&cmd=get_activity"
    [array]$arrCurrentStreams = $objCurrentActivity.response.data.sessions
