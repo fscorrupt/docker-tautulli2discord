@@ -1,7 +1,0 @@
-docker run -v /opt/appdata/Powershell/Tautulli2Discord:/Config  -it --rm mcr.microsoft.com/powershell pwsh /Config/PlexLibraryStats.ps1
-docker run -v /opt/appdata/Powershell/Tautulli2Discord:/Config  -it --rm mcr.microsoft.com/powershell pwsh /Config/PlayStats_Last12Months.ps1
-docker run -v /opt/appdata/Powershell/Tautulli2Discord:/Config  -it --rm mcr.microsoft.com/powershell pwsh /Config/CurrentStreams.ps1
-docker run -v /opt/appdata/Powershell/Tautulli2Discord:/Config  -it --rm mcr.microsoft.com/powershell pwsh /Config/PopularOnPlex.ps1
-docker run -v /opt/appdata/Powershell/Tautulli2Discord:/Config  -it --rm mcr.microsoft.com/powershell pwsh /Config/SABnzbdInfo.ps1
-docker run -v /opt/appdata/Powershell/Tautulli2Discord:/Config  -it --rm mcr.microsoft.com/powershell pwsh /Config/TopXUsersByMediaType.ps1
-docker run -v /opt/appdata/Powershell/Tautulli2Discord:/Config  -it --rm mcr.microsoft.com/powershell pwsh /Config/UsersLastSeen_ManualCalc.ps1
