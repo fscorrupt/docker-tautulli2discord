@@ -57,8 +57,11 @@ $json = @"
 $json | Out-File "$PSScriptRoot\config\config.json.template"
 
 if(-not (test-path "$PSScriptRoot\config\log")){
-  New-Item -Path "$PSScriptRoot\config\log" -ItemType Directory
+  $Null = New-Item -Path "$PSScriptRoot\config\log" -ItemType Directory
 }
+
+# Install required Module
+$Null = Install-Module PSReadLine -Force -SkipPublisherCheck -AllowPrerelease
 
 cls
 # Show integraded Scripts
