@@ -67,20 +67,16 @@ $starttime = Get-Date
 
 $scripts =  (get-childitem -Filter *.ps1 | where name -ne 'welcome.ps1').Name.replace('.ps1','')
 Write-Host "##############################################################################" -ForegroundColor Green
-Write-Host  ''
-Write-Host "Currently there are '$($scripts.count)' Scripts integrated" -ForegroundColor Yellow
+Write-Host "Currently '$($scripts.count)' scripts integrated" -ForegroundColor Yellow
 Write-Host  ''
 Write-Host "Please create 'config.json' based on template, located here: " -ForegroundColor Yellow -NoNewline
 Write-Host "/opt/appdata/tautulli2discord/config/config.json.template" -ForegroundColor Cyan 
-Write-Host  ''
 Write-Host "Fill out all informations in 'config.json'" -ForegroundColor Yellow
 Write-Host  ''
-Write-Host "Example on how to run the script manually: " -ForegroundColor Yellow -NoNewline
+Write-Host " - Example on how to run the script manually: " -ForegroundColor Yellow -NoNewline
 Write-Host "docker exec -it tautulli2discord pwsh PlexLibraryStats.ps1" -ForegroundColor Cyan
-Write-Host  ''
-Write-Host "Example on how to run the script via cron: " -ForegroundColor Yellow -NoNewline
+Write-Host " - Example on how to run the script via cron: " -ForegroundColor Yellow -NoNewline
 Write-Host "* * * * * docker exec tautulli2discord pwsh CurrentStreams.ps1 >/dev/null 2>&1" -ForegroundColor Cyan
-Write-Host  ''
 Write-Host "##############################################################################" -ForegroundColor Green
 Write-Host  ''
 
