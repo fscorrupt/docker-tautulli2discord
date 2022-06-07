@@ -15,8 +15,8 @@ And a schedule task example:
 ```sudo crontab -e```
 add a new line like this:
 
-```#Plex Library Stats
-@hourly docker run -v /opt/appdata/Powershell/Tautulli2Discord:/Config  -it --rm mcr.microsoft.com/powershell pwsh /Config/PlexLibraryStats.ps1
+```# Current Streams
+* * * * * docker exec tautulli2discord pwsh CurrentStreams.ps1 >/dev/null 2>&1
 ```
 I have set my scripts up to run as a Scheduled Task, so it's completely hands off.
 
@@ -33,11 +33,8 @@ LibraryStats.ps1
 
 ![DiscordLibraryStats.ps1](https://i.imgur.com/ghONij6.png)
 
-PlaysForLast12Months_v2.ps1
 
-![DiscordPlaysForLast12Months_v2.ps1](https://i.imgur.com/NLqkeI2.png)
-
-TopXUsersByMediaType.ps1
+TopPlexStats.ps1
 
 ![DiscordTopXUsersByMediaType.ps1](https://i.imgur.com/0SNBXA9.png)
 
