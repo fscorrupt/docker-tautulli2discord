@@ -51,7 +51,9 @@ $body
 
 function CreateChart {
 # Chart creator
-[void][Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms.DataVisualization")
+[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") 
+[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") 
+[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms.DataVisualization")
 
 # chart object
    $chart1 = New-object System.Windows.Forms.DataVisualization.Charting.Chart
