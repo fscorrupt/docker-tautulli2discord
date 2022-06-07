@@ -8,4 +8,4 @@ COPY *.ps1 .
 
 RUN pwsh -c "Install-Module PSReadLine -Force -SkipPublisherCheck -AllowPrerelease"
 
-CMD [ "pwsh", "./main.ps1" ]
+CMD [ "pwsh", "ls -Filter *.ps1" ]
