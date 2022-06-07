@@ -4,8 +4,8 @@ LABEL org.opencontainers.image.source https://github.com/fscorrupt/docker-tautul
 
 RUN apt-get update && apt-get install git -y
 
-COPY . .
+COPY *.ps1 .
 
 RUN pwsh -c "Install-Module PSReadLine -Force -SkipPublisherCheck -AllowPrerelease"
 
-CMD [ "pwsh" ]
+CMD [ "pwsh", "ls" ]
