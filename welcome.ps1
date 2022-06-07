@@ -8,6 +8,54 @@ function recurse {
   recurse
 }
 
+$json = @"
+{
+   "Plex" : {
+      "Url" : "https://plex.domain.com",
+      "token" : "<redacted>"
+   },
+   "Tautulli" : {
+      "Url" : "https://tautulli.domain.com",
+      "APIKey" : "<redacted>"
+   },
+   "SABnzbd" : {
+      "Url" : "https://sabnzbd.domain.com",
+      "APIKey" : "<redacted>"
+   },
+   "TMDB" : {
+      "APIKey" : "<redacted>"
+   },
+   "ScriptSettings" : {
+      "CurrentStreams" : {
+         "Webhook" : "https://discord.com/api/webhooks/<redacted>/<redacted>"
+      },
+      "PlexLibraryStats" : {
+         "Webhook" : "https://discord.com/api/webhooks/<redacted>/<redacted>",
+         "ExcludedLibraries" : ["Photos", "Live TV", "Fitness", "YouTube"]
+      },
+      "PlexPlayStats" : {
+         "Webhook" : "https://discord.com/api/webhooks/<redacted>/<redacted>",
+         "RemoveMonthsWithZeroPlays" : true
+      },
+      "PopularOnPlex" : {
+         "Webhook" : "https://discord.com/api/webhooks/<redacted>/<redacted>",
+         "Count" : 5,
+         "Days" : 30
+      },
+      "SABnzbdStatus" : {
+         "Webhook" : "https://discord.com/api/webhooks/<redacted>/<redacted>"
+      },
+      "TopPlexStats" : {
+         "Webhook" : "https://discord.com/api/webhooks/<redacted>/<redacted>",
+         "Count" : 5,
+         "Days" : 30
+      }
+   }
+}
+"@
+
+$json | Out-File "$PSScriptRoot\config\config.json.template"
+
 cls
 # Show integraded Scripts
 $starttime = Get-Date
