@@ -57,10 +57,10 @@ $json = @"
 $json | Out-File "$PSScriptRoot\config\config.json.template"
 
 if(-not (test-path "$PSScriptRoot\config\log")){
-  New-Item -Path "$PSScriptRoot\config\log" -ItemType Directory
-  $Null = New-Item -Path "$PSScriptRoot\config\log" -ItemType Directory
+  $null = New-Item -Path "$PSScriptRoot\config\log" -ItemType Directory -ErrorAction SilentlyContinue
 }
 
+# Install 
 cls
 # Show integraded Scripts
 $starttime = Get-Date
