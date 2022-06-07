@@ -6,16 +6,14 @@ I tried to make the scripts as easy to use as possible.
 
 The scripts rely on the config.json file.
 
+In order for some scripts to work, you must set `api_sql = 1"` in the Tautulli config.ini file -> It will require a restart of Tautulli.
+
 If you want File Size shown in scripts, make sure to enable this setting in tautulli:
 ```
 Tautulli > Settings > General > and enable -> "Calculate Total File Sizes"
 
 After that do a "Refresh Libraries" in Tautulli.
 ```
-
-In order for this to work, you must set `api_sql = 1"` in the Tautulli config.ini file. 
-
-It will require a restart of Tautulli.
 
 
 Information on how to set up a Discord webhook can be found be [here.](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
