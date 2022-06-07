@@ -1,33 +1,43 @@
 {
-   "Plex": {
-      "Url": "https://plex.domain.com",
-      "token": "XXXXXXXXXXXXXXXXXXXX"
+   "Plex" : {
+      "Url" : "https://plex.domain.com",
+      "token" : "<redacted>"
    },
-   "Tautulli": {
-      "Url": "https://tautulli.domain.com",
-      "APIKey": "XXXXXXXXXXXXXXXXXXXX"
+   "Tautulli" : {
+      "Url" : "https://tautulli.domain.com",
+      "APIKey" : "<redacted>"
    },
-   "SABnzbd": {
-      "Url": "https://sabnzbd.domain.com",
-      "APIKey": "XXXXXXXXXXXXXXXXXXXX"
+   "SABnzbd" : {
+      "Url" : "https://sabnzbd.domain.com",
+      "APIKey" : "<redacted>"
    },
    "TMDB" : {
-      "APIKey" : "XXXXXXXXXXXXXXXXXXXX"
+      "APIKey" : "<redacted>"
    },
-   "Webhooks": {
-      "StorageInfo": "https://discord.com/api/webhooks/XXXXXXXXXXXXXXXXXXXX",
-      "CurrentStreams": "https://discord.com/api/webhooks/XXXXXXXXXXXXXXXXXXXX",
-      "SABnzbd": "https://discord.com/api/webhooks/XXXXXXXXXXXXXXXXXXXX",
-      "LibraryStats": "https://discord.com/api/webhooks/XXXXXXXXXXXXXXXXXXXX",
-      "MonthlyStats": "https://discord.com/api/webhooks/XXXXXXXXXXXXXXXXXXXX",
-      "Radarr": "https://discord.com/api/webhooks/XXXXXXXXXXXXXXXXXXXX",
-      "RecentlyAdded": "https://discord.com/api/webhooks/XXXXXXXXXXXXXXXXXXXX",
-      "Overseerr": "https://discord.com/api/webhooks/XXXXXXXXXXXXXXXXXXXX",
-      "ServerIssues": "https://discord.com/api/webhooks/XXXXXXXXXXXXXXXXXXXX",
-      "Top5": "https://discord.com/api/webhooks/XXXXXXXXXXXXXXXXXXXX",
-      "Sonarr": "https://discord.com/api/webhooks/XXXXXXXXXXXXXXXXXXXX",
-      "WatchingListening": "https://discord.com/api/webhooks/XXXXXXXXXXXXXXXXXXXX",
-      "PopularOnPlex": "https://discord.com/api/webhooks/XXXXXXXXXXXXXXXXXXXX",
-      "ServiceStatus": "https://discord.com/api/webhooks/XXXXXXXXXXXXXXXXXXXX"
+   "ScriptSettings" : {
+      "CurrentStreams" : {
+         "Webhook" : "https://discord.com/api/webhooks/<redacted>/<redacted>"
+      },
+      "PlexLibraryStats" : {
+         "Webhook" : "https://discord.com/api/webhooks/<redacted>/<redacted>",
+         "ExcludedLibraries" : ["Photos", "Live TV", "Fitness", "YouTube"]
+      },
+      "PlexPlayStats" : {
+         "Webhook" : "https://discord.com/api/webhooks/<redacted>/<redacted>",
+         "RemoveMonthsWithZeroPlays" : true
+      },
+      "PopularOnPlex" : {
+         "Webhook" : "https://discord.com/api/webhooks/<redacted>/<redacted>",
+         "Count" : 5,
+         "Days" : 30
+      },
+      "SABnzbdStatus" : {
+         "Webhook" : "https://discord.com/api/webhooks/<redacted>/<redacted>"
+      },
+      "TopPlexStats" : {
+         "Webhook" : "https://discord.com/api/webhooks/<redacted>/<redacted>",
+         "Count" : 5,
+         "Days" : 30
+      }
    }
 }

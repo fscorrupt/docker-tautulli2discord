@@ -146,7 +146,7 @@ foreach ($stream in $arrCurrentStreams) {
          author = @{
             name = 'Open on Plex'
             url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F$($stream.grandparent_rating_key)"
-            icon_url = 'https://styles.redditmedia.com/t5_2ql7e/styles/communityIcon_mdwl2x2rtzb11.png?width=256&s=14a77880afea69b1dac1b0f14dc52b09c492b775'
+            icon_url = 'https://i.imgur.com/smorfDf.png'
          }
          description = Get-SanitizedString -strInputString $stream.summary
          thumbnail = @{url = "https://image.tmdb.org/t/p/w500$($objTMDBResults.poster_path)"}
@@ -177,7 +177,7 @@ foreach ($stream in $arrCurrentStreams) {
          author = @{
             name = 'Open on Plex'
             url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F$($stream.rating_key)"
-            icon_url = 'https://styles.redditmedia.com/t5_2ql7e/styles/communityIcon_mdwl2x2rtzb11.png?width=256&s=14a77880afea69b1dac1b0f14dc52b09c492b775'
+            icon_url = 'https://i.imgur.com/smorfDf.png'
          }
          description = Get-SanitizedString -strInputString $stream.summary
          fields = @{
@@ -211,7 +211,7 @@ foreach ($stream in $arrCurrentStreams) {
          author = @{
             name = "Open on Plex"
             url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F$($stream.rating_key)"
-            icon_url = 'https://styles.redditmedia.com/t5_2ql7e/styles/communityIcon_mdwl2x2rtzb11.png?width=256&s=14a77880afea69b1dac1b0f14dc52b09c492b775'
+            icon_url = 'https://i.imgur.com/smorfDf.png'
          }
          description = Get-SanitizedString -strInputString $stream.summary
          thumbnail = @{url = "https://image.tmdb.org/t/p/w500$($objTMDBResults.poster_path)"}

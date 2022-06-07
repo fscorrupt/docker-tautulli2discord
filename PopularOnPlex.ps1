@@ -1,7 +1,7 @@
 ﻿Clear-Host
 
 # Enter the path to the config file for Tautulli and Discord
-[string]$strPathToConfig = ".\config\config.json"
+[string]$strPathToConfig = "$PSScriptRoot\config\config.json"
 
 # Script name MUST match what is in config.json under "ScriptSettings"
 [string]$strScriptName = 'PopularOnPlex'
@@ -147,7 +147,7 @@ foreach ($movie in $arrTopMovies) {
          author = @{
             name = "Open on Plex"
             url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F" + $movie.rating_key
-            icon_url = "https://styles.redditmedia.com/t5_2ql7e/styles/communityIcon_mdwl2x2rtzb11.png?width=256&s=14a77880afea69b1dac1b0f14dc52b09c492b775"
+            icon_url = "https://i.imgur.com/smorfDf.png"
          }
          description = "Unknown"
          thumbnail = @{url = "https://www.programmableweb.com/sites/default/files/TMDb.jpg"}
@@ -178,7 +178,7 @@ foreach ($movie in $arrTopMovies) {
          author = @{
             name = "Open on Plex"
             url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F$($movie.rating_key)"
-            icon_url = "https://styles.redditmedia.com/t5_2ql7e/styles/communityIcon_mdwl2x2rtzb11.png?width=256&s=14a77880afea69b1dac1b0f14dc52b09c492b775"
+            icon_url = "https://i.imgur.com/smorfDf.png"
          }
          description = Get-SanitizedString -strInputString $($objTMDBMovieResults.overview)
          thumbnail = @{url = "https://image.tmdb.org/t/p/w500$($objTMDBMovieResults.poster_path)"}
@@ -217,7 +217,7 @@ foreach ($show in $arrTopTVShows) {
          author = @{
             name = "Open on Plex"
             url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F$($show.rating_key)"
-            icon_url = 'https://styles.redditmedia.com/t5_2ql7e/styles/communityIcon_mdwl2x2rtzb11.png?width=256&s=14a77880afea69b1dac1b0f14dc52b09c492b775'
+            icon_url = 'https://i.imgur.com/smorfDf.png'
          }
          description = "Unknown"
          #thumbnail = @{url = "https://image.tmdb.org/t/p/w500$($objTMDBTVResults.poster_path)"}
@@ -252,7 +252,7 @@ foreach ($show in $arrTopTVShows) {
          author = @{
             name = "Open on Plex"
             url = "https://app.plex.tv/desktop/#!/server/f811f094a93f7263b1e3ad8787e1cefd99d92ce4/details?key=%2Flibrary%2Fmetadata%2F$($show.rating_key)"
-            icon_url = "https://styles.redditmedia.com/t5_2ql7e/styles/communityIcon_mdwl2x2rtzb11.png?width=256&s=14a77880afea69b1dac1b0f14dc52b09c492b775"
+            icon_url = "https://i.imgur.com/smorfDf.png"
          }
          description = Get-SanitizedString -strInputString $objTMDBTVResults.overview
          thumbnail = @{url = "https://image.tmdb.org/t/p/w500$($objTMDBTVResults.poster_path)"}
