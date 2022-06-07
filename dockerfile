@@ -8,4 +8,4 @@ RUN mkdir /config
 COPY *.ps1 .
 COPY config.json.template /config
 
-CMD [ "pwsh","-command","get-childitem -Filter *.ps1" ]
+CMD [ "pwsh","./welcome.ps1" ]
