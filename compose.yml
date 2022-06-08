@@ -1,0 +1,16 @@
+---
+version: "3"
+services:
+  tautulli2discord:
+    hostname: "tautulli2discord"
+    container_name: "tautulli2discord"
+    environment:
+      - "PGID=1000"
+      - "PUID=1000"
+      - "TZ=Europe/Berlin"
+      - "UMASK=022"
+      - "TERM=xterm"
+    image: "ghcr.io/fscorrupt/docker-tautulli2discord:latest"
+    restart: "unless-stopped"
+    volumes:
+      - "${APPFOLDER}/tautulli2discord/config:/config:rw"
