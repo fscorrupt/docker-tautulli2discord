@@ -13,4 +13,4 @@ services:
     image: "ghcr.io/fscorrupt/docker-tautulli2discord:latest"
     restart: "unless-stopped"
     volumes:
-      - "${APPFOLDER}/tautulli2discord/config:/config:rw"
+      - "/opt/appdata/tautulli2discord/config:/config:rw"
