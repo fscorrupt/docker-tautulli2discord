@@ -42,16 +42,16 @@ LibraryStats.ps1
 
 ![DiscordLibraryStats.ps1](https://i.imgur.com/ghONij6.png)
 
-
 TopPlexStats.ps1
 
 ![DiscordTopXUsersByMediaType.ps1](https://i.imgur.com/0SNBXA9.png)
 
+PlexPlayStats.ps1
+
+![DiscordPlexPlayStats.ps1](https://i.imgur.com/EQ5kF22.png)
+
 # Issues
 Probably. Just let me know and I will try to correct.
-
-# Thanks
-Many thanks to @Shayne55434 for his help and contributions
 
 # Enjoy
 This one is simple.
