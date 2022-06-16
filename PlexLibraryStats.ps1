@@ -293,7 +293,7 @@ foreach ($Library in $objLibraries){
 $arrLibraryStats = $arrLibraryStats | Sort-Object -Property Library, Type
 [string]$strBody = $null
 
-if ($arrLibraryStats.count -gt '10'){
+if ($arrLibraryStats.count -gt '5'){
   foreach($Library in $arrLibraryStats){
     if ($Library.Library -eq 'Audiobooks') {
       $strBody += "`n$($Library.Library)`n$($Library.count) authors | $($Library.SeasonAlbumCount) books | $($Library.EpisodeTrackCount) chapters | ($($Library.Size)$($Library.Format))`n________________________________________________________`n"
