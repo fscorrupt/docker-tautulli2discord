@@ -15,7 +15,7 @@ Clear-Host
 [string]$strScriptName = 'PlexLibraryStats'
 
 # Path to where the stat image should be saved and sent from
-[string]$strImagePath = "$PSScriptRoot\Stats.png"
+[string]$strImagePath = "$PSScriptRoot\config\stats.png"
 
 <############################################################
     Do NOT edit lines below unless you know what you are doing!
@@ -310,7 +310,7 @@ if ($arrLibraryStats.count -gt '5'){
   }
 
   # Call the function that will send the embed array to the webhook URL via the default configuration file
-  ConvertTo-Image -Text $strBody -path "$PSScriptRoot\" -ImageType "png" -ImageName "Stats" -BackGroundMode "SolidColor" -FontSize 25 -font "Comfortaa Regular"
+  ConvertTo-Image -Text $strBody -path "$PSScriptRoot\config\" -ImageType "png" -ImageName "stats" -BackGroundMode "SolidColor" -FontSize 25 -font "Comfortaa Regular"
   Invoke-PSDsHook -FilePath $strImagePath -WebhookUrl $strDiscordWebhook
 }
 Else{
