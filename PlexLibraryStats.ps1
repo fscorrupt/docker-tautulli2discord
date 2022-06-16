@@ -311,7 +311,7 @@ if ($arrLibraryStats.count -gt '15'){
 
   # Call the function that will send the embed array to the webhook URL via the default configuration file
   Import-Module TextToImage
-  ConvertTo-Image -Text $strBody -path "$PSScriptRoot\config\" -ImageType "png" -ImageName "stats" -BackGroundMode "SolidColor" -FontSize 25 -font "Comfortaa Regular"
+  ConvertTo-Image -Text $strBody -path "$PSScriptRoot/config/" -ImageType "png" -ImageName "stats" -BackGroundMode "SolidColor" -FontSize 25 -font "Comfortaa Regular"
   Invoke-PSDsHook -FilePath $strImagePath -WebhookUrl $strDiscordWebhook
 }
 Else{
