@@ -53,8 +53,6 @@ class DiscordFile {
       return $fileContent
    }
 }
-Add-Type –AssemblyName System.Drawing
-Add-Type –AssemblyName System.Windows.Forms
 
 <#
 	Thanks: https://www.reddit.com/user/ka-splam/
