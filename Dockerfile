@@ -3,6 +3,7 @@ LABEL maintainer=fscorrupt
 LABEL org.opencontainers.image.source https://github.com/fscorrupt/docker-tautulli2discord
 
 RUN pwsh -c "Install-Module PSReadLine -Force -SkipPublisherCheck -AllowPrerelease"
+RUN pwsh -c "Install-Module TextToImage -Force -SkipPublisherCheck -AllowPrerelease"
 
 COPY *.ps1 .
 
