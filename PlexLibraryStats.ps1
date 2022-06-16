@@ -15,7 +15,7 @@ Clear-Host
 [string]$strScriptName = 'PlexLibraryStats'
 
 # Path to where the stat image should be saved and sent from
-[string]$strImagePath = "$PSScriptRoot\config\stats.png"
+[string]$strImagePath = "$PSScriptRoot/config/stats.png"
 
 <############################################################
     Do NOT edit lines below unless you know what you are doing!
