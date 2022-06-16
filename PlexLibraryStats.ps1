@@ -293,7 +293,7 @@ foreach ($Library in $objLibraries){
 $arrLibraryStats = $arrLibraryStats | Sort-Object -Property Library, Type
 [string]$strBody = $null
 
-if ($arrLibraryStats.count -gt '5'){
+if ($arrLibraryStats.count -gt '15'){
   foreach($Library in $arrLibraryStats){
     if ($Library.Library -eq 'Audiobooks') {
       $strBody += "`n$($Library.Library)`n$($Library.count) authors | $($Library.SeasonAlbumCount) books | $($Library.EpisodeTrackCount) chapters | ($($Library.Size)$($Library.Format))`n________________________________________________________`n"
@@ -310,6 +310,7 @@ if ($arrLibraryStats.count -gt '5'){
   }
 
   # Call the function that will send the embed array to the webhook URL via the default configuration file
+  Import-Module TextToImage
   ConvertTo-Image -Text $strBody -path "$PSScriptRoot\config\" -ImageType "png" -ImageName "stats" -BackGroundMode "SolidColor" -FontSize 25 -font "Comfortaa Regular"
   Invoke-PSDsHook -FilePath $strImagePath -WebhookUrl $strDiscordWebhook
 }
