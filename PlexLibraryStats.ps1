@@ -1,3 +1,6 @@
+using namespace System.Drawing
+using namespace System.Windows.Forms
+
 Clear-Host
 
 <############################################################
@@ -9,7 +12,7 @@ Clear-Host
 #############################################################>
 
 # Enter the path to the config file for Tautulli and Discord
-[string]$strPathToConfig = "$PSScriptRoot\config\config.json"
+[string]$strPathToConfig = "$PSScriptRoot/config/config.json"
 
 # Script name MUST match what is in config.json under "ScriptSettings"
 [string]$strScriptName = 'PlexLibraryStats'
@@ -50,177 +53,123 @@ class DiscordFile {
       return $fileContent
    }
 }
-function ConvertToImage {
-	<#
-	A URL to the license for this module.
-    LicenseUri = 'https://raw.githubusercontent.com/deathcrafter/Text-To-Image-Mod/master/LICENSE'
-    
-    A URL to the main website for this project.
-    ProjectUri = 'https://github.com/deathcrafter/Text-To-Image-Mod'
-	#>
-    [CmdletBinding(SupportsShouldProcess=$true,
-                  PositionalBinding=$false,
-                  ConfirmImpact='Medium')]
-    [Alias('txt2img')]
+Add-Type –AssemblyName System.Drawing
+Add-Type –AssemblyName System.Windows.Forms
+
+<#
+	Thanks: https://www.reddit.com/user/ka-splam/
+.Synopsis
+    Convert text to image
+.DESCRIPTION
+    Takes text input from the pipeline or as a parameter, and makes an image of it.
+
+.EXAMPLE
+    "sample text" | export-png -Path output.png
+
+.EXAMPLE
+    get-childitem c:\ | export-png -path output.png
+
+.EXAMPLE
+    get-process | format-table -AutoSize | Out-String | Export-Png -path output.png
+
+#>
+
+function Export-Png
+{
+    [CmdletBinding()]
     Param
     (
-        # Text which should be converted to Image
-        [Parameter(Mandatory=$true, 
-                   ValueFromPipeline=$true,
-                   ValueFromPipelineByPropertyName=$true, 
-                   ValueFromRemainingArguments=$false, 
-                   Position=0)]
-        [ValidateNotNull()]
-        [ValidateNotNullOrEmpty()]
-        [Alias("Text")] 
-        [string]
-        $ImageText,
+        # Param1 help description
+        [Parameter(Mandatory=$true,
+                    ValueFromPipeline=$true,
+                    Position=0)]
+        [string[]]$InputObject,
 
-        # Generated Image Style
-        [Parameter(ValueFromPipeline=$true,
-                   ValueFromPipelineByPropertyName=$true, 
-                   ValueFromRemainingArguments=$false)]
-        [ValidateNotNull()]
-        [ValidateSet("Transparent","SolidColor")]
-        [Alias("BackgroundMode")]
-        $ImageStyle="Transparent",
+        # Path where output image should be saved
+        [string]$Path,
 
-        #Background color in solid mode
-        [Parameter(ValueFromPipeline=$true,
-                   ValueFromPipelineByPropertyName=$true, 
-                   ValueFromRemainingArguments=$false)]
-        [Alias("SolidColor")]
-        $SColor='255,30,30,30',
-
-        #FontFace
-        [Parameter(ValueFromPipeline=$true,
-                   ValueFromPipelineByPropertyName=$true, 
-                   ValueFromRemainingArguments=$false)]
-        [Alias("FontFace","font")]
-        $Face="Segoe UI",
-
-        #FontSize
-        [Parameter(ValueFromPipeline=$true,
-                   ValueFromPipelineByPropertyName=$true, 
-                   ValueFromRemainingArguments=$false)]
-        [Alias("FontSize","size")]
-        $FSize="11",
-
-        #FontColor
-        [Parameter(ValueFromPipeline=$true,
-                   ValueFromPipelineByPropertyName=$true, 
-                   ValueFromRemainingArguments=$false)]
-        [Alias("FontColor")]
-        $FColor="White",
-
-                
-        # New Image Format
-        [Parameter(ValueFromPipeline=$true,
-                   ValueFromPipelineByPropertyName=$true, 
-                   ValueFromRemainingArguments=$false)]
-        [ValidateSet("Png", "Bmp", "Gif", "Jpeg", "Tiff")]
-        [Alias("ImageType","type")]
-        $ImageFormat="Png",
-
-        # New Image Output Path. Default to Current Lcoation
-        [Parameter(ValueFromPipeline=$true,
-                   ValueFromPipelineByPropertyName=$true, 
-                   ValueFromRemainingArguments=$false)]
-        [Alias("ImagePath","path")]
-        $OutputPath,
-
-        # New Image Name
-        [Parameter(ValueFromPipeline=$true,
-                   ValueFromPipelineByPropertyName=$true, 
-                   ValueFromRemainingArguments=$false)]
-        [Alias("name","ImageName")]
-        $NewImageName="NewImage"
-
+        # Clipboard support,
+        [switch]$ToClipboard
     )
 
-    Begin
+    begin
     {
+        # can render multiple lines, so $lines exists to gather
+        # all input from the pipeline into one collection
+        [Collections.Generic.List[String]]$lines = @()
     }
     Process
     {
-        if ($pscmdlet.ShouldProcess("'$($ImageText)'. Using $ImageStyle style"))
-        {
-            try
-              {
-                  
-                  switch ($ImageStyle)
-                  {
-                      'Transparent' {
-                        $ImageStyleObjProps=@{
-                            FontName=$Face
-                            FontSize=$FSize
-                            TextColor=[System.Drawing.Brushes]::$FColor
-                            BackgroundColor=[System.Drawing.Color]::FromArgb(0,0,0,0)
-                        }
-                        break
-                      }
-                      'SolidColor' {
-                        $aCache = [regex]::Match($SColor, "^(\d{0,3}?)\,?\s*?(\d{0,3})\,\s*?(\d{0,3})\,\s*?(\d{0,3})$").captures.groups[1].value
-                        $aCol = $(if($aCache){$aCache}else{255})
-                        $rCol = [regex]::Match($SColor, "^(\d{0,3}?)\,?\s*?(\d{0,3})\,\s*?(\d{0,3})\,\s*?(\d{0,3})$").captures.groups[2].value
-                        $gCol = [regex]::Match($SColor, "^(\d{0,3}?)\,?\s*?(\d{0,3})\,\s*?(\d{0,3})\,\s*?(\d{0,3})$").captures.groups[3].value
-                        $bCol = [regex]::Match($SColor, "^(\d{0,3}?)\,?\s*?(\d{0,3})\,\s*?(\d{0,3})\,\s*?(\d{0,3})$").captures.groups[4].value
-                        $ImageStyleObjProps=@{
-                            FontName=$Face
-                            FontSize=$FSize
-                            TextColor=[System.Drawing.Brushes]::$FColor
-                            BackgroundColor=[System.Drawing.Color]::FromArgb($aCol,$rCol,$gCol,$bCol)
-                        }
-                        break
-                      }
-                      Default {}
-                  }
-                  $ImageStyleObj=New-Object -TypeName psobject -Property $ImageStyleObjProps
-                  $Format=[System.Drawing.Imaging.ImageFormat]::$ImageFormat
-                  $FontObj=New-Object System.Drawing.Font $ImageStyleObj.FontName,$ImageStyleObj.FontSize
-                  $BitmapObj=New-Object System.Drawing.Bitmap 1,1
-                  $GraphicsObj=[System.Drawing.Graphics]::FromImage($BitmapObj)
-                  $StringSize=$GraphicsObj.MeasureString($ImageText, $FontObj)
-                  $BitmapObj=New-Object System.Drawing.Bitmap $([int]$StringSize.Width),$([int]$StringSize.Height)
-                  $GraphicsObj=[System.Drawing.Graphics]::FromImage($BitmapObj)
-
-                  $GraphicsObj.CompositingQuality=[System.Drawing.Drawing2D.CompositingQuality]::HighQuality
-                  $GraphicsObj.InterpolationMode=[System.Drawing.Drawing2D.InterpolationMode]::HighQualityBilinear
-                  $GraphicsObj.PixelOffsetMode=[System.Drawing.Drawing2D.PixelOffsetMode]::HighQuality
-                  $GraphicsObj.SmoothingMode=[System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
-
-                  $GraphicsObj.Clear($ImageStyleObj.BackgroundColor)
-                  $GraphicsObj.DrawString($ImageText, $FontObj, $ImageStyleObj.TextColor, 0, 0)
-
-                  $FontObj.Dispose()
-                  $GraphicsObj.Flush()
-                  $GraphicsObj.Dispose()
-                  
-                  if($null -eq $OutputPath){
-                    $OutputPath=Get-Location
-                    $OutputPath=$OutputPath.Path.Replace("\","/")
-                  }else{
-                    $OutputPath=$OutputPath.Replace("\","/")
-                  }
-                  
-                  $ImageFileName="$OutputPath"+"$NewImageName.$($ImageFormat.ToLower())"
-                  
-                  $BitmapObj.Save("$ImageFileName", $Format);
-
-
-              }
-              catch 
-              {
-                Write-Verbose "Failed -  please review exception message for more details"
-                Write-Output ("Catched Exception: - $($_.exception.message)")
-              }
-              
-              
-        }
+        # each incoming string from the pipeline, works even
+        # if it's a multiline-string. If it's an array of string
+        # this implicitly joins them using $OFS
+        $null = $lines.Add($InputObject)
     }
+
     End
     {
+        # join the array of lines into a string, so the 
+        # drawing routines can render the multiline string directly
+        # without us looping over them or calculating line offsets, etc.
+        [string]$lines = $lines -join "`n"
+
+
+        # placeholder 1x1 pixel bitmap, will be used to measure the line
+        # size, before re-creating it big enough for all the text
+        [Bitmap]$bmpImage = [Bitmap]::new(1, 1)
+
+
+        # Create the Font, using any available MonoSpace font
+        # hardcoded size and style, because it's easy
+        [Font]$font = [Font]::new([FontFamily]::GenericMonospace, 12, [FontStyle]::Regular, [GraphicsUnit]::Pixel)
+
+
+        # Create a graphics object and measure the text's width and height,
+        # in the chosen font, with the chosen style.
+        [Graphics]$Graphics = [Graphics]::FromImage($BmpImage)
+        [int]$width  = $Graphics.MeasureString($lines, $Font).Width
+        [int]$height = $Graphics.MeasureString($lines, $Font).Height
+
+
+        # Recreate the bmpImage big enough for the text.
+        # and recreate the Graphics context from the new bitmap
+        $BmpImage = [Bitmap]::new($width, $height)
+        $Graphics = [Graphics]::FromImage($BmpImage)
+
+
+        # Set Background color, and font drawing styles
+        # hard coded because early version, it's easy
+        $Graphics.Clear([Color]::Black)
+        $Graphics.SmoothingMode = [Drawing2D.SmoothingMode]::Default
+        $Graphics.TextRenderingHint = [Text.TextRenderingHint]::SystemDefault
+        $brushColour = [SolidBrush]::new([Color]::FromArgb(200, 200, 200))
+
+
+        # Render the text onto the image
+        $Graphics.DrawString($lines, $Font, $brushColour, 0, 0)
+
+        $Graphics.Flush()
+
+
+        if ($Path)
+        {
+            # Export image to file
+            [System.IO.Directory]::SetCurrentDirectory(((Get-Location -PSProvider FileSystem).ProviderPath))
+            $Path = [System.IO.Path]::GetFullPath($Path)
+            $bmpImage.Save($Path, [Imaging.ImageFormat]::Png)
+        }
+
+        if ($ToClipboard)
+        {
+            [Windows.Forms.Clipboard]::SetImage($bmpImage)
+        }
+
+        if (-not $ToClipboard -and -not $Path)
+        {
+            Write-Warning -Message "No output chosen. Use parameter -LiteralPath 'out.png' , or -ToClipboard , or both"
+        }
     }
+
 }
 function Push-ObjectToDiscord {
   [CmdletBinding()]
@@ -482,7 +431,7 @@ if ($arrLibraryStats.count -gt '5'){
   }
 
   # Call the function that will send the embed array to the webhook URL via the default configuration file
-  ConvertToImage -Text $strBody -path "$PSScriptRoot/config/" -ImageType "png" -ImageName "stats" -BackGroundMode "SolidColor" -FontSize 25 -font "Comfortaa Regular"
+  $strBody | export-png -Path $strImagePath
   Invoke-PSDsHook -FilePath $strImagePath -WebhookUrl $strDiscordWebhook
 }
 Else{
