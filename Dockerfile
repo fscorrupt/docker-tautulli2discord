@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/powershell:7.1.1-alpine-3.12-20210125
+FROM mcr.microsoft.com/powershell:7.0.1-alpine-3.10
 LABEL maintainer=fscorrupt
 LABEL org.opencontainers.image.source https://github.com/fscorrupt/docker-tautulli2discord
 RUN apk update
