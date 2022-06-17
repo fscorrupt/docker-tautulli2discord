@@ -1,6 +1,9 @@
 using namespace System.Drawing
 using namespace System.Windows.Forms
 
+Add-Type -AssemblyName System.Drawing -ErrorAction SilentlyContinue
+Add-Type -AssemblyName System.Windows.Forms -ErrorAction SilentlyContinue
+
 Clear-Host
 
 <############################################################
