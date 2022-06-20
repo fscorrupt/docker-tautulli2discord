@@ -20,7 +20,8 @@
       },
       "PlexLibraryStats" : {
          "Webhook" : "https://discord.com/api/webhooks/<redacted>/<redacted>",
-         "ExcludedLibraries" : ["Photos", "Live TV", "Fitness", "YouTube"]
+         "ExcludedLibraries" : ["Photos", "Live TV", "Fitness", "YouTube"],
+		   "IncludedLibraries" : []
       },
       "PlexPlayStats" : {
          "Webhook" : "https://discord.com/api/webhooks/<redacted>/<redacted>",
