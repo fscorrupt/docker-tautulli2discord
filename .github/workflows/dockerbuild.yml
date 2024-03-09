@@ -11,9 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.0.2
+        uses: actions/checkout@v4.1.1
 
-      - uses: FranzDiebold/github-env-vars-action@v2.3.1
+      - uses: FranzDiebold/github-env-vars-action@v2.8.0
       - name: Print environment variables
         run: |
           echo "CI_REPOSITORY_NAME=$CI_REPOSITORY_NAME"
@@ -29,22 +29,22 @@ jobs:
             VERSION=nightly
           fi
           TAGS="${DOCKER_IMAGE}:${VERSION}"
-          echo ::set-output name=tags::${TAGS}
-          echo ::set-output name=title::${GITHUB_REPOSITORY}
-          echo ::set-output name=version::${VERSION}
-          echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+          echo "tags=${TAGS}" >> $GITHUB_OUTPUT
+          echo "title=${GITHUB_REPOSITORY}" >> $GITHUB_OUTPUT
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "created=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_OUTPUT
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3.0.0
         with:
           platforms: linux/amd64,linux/armhf,linux/arm64
 
       - name: Set up Docker Buildx
         id: buildx
-        uses: docker/setup-buildx-action@v2.0.0
+        uses: docker/setup-buildx-action@v3.1.0
 
       - name: Cache Docker layers
-        uses: actions/cache@v3.0.2
+        uses: actions/cache@v4.0.1
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
@@ -53,7 +53,7 @@ jobs:
 
       - name: Login to GitHub Container Registry
         if: github.event_name != 'pull_request'
-        uses: docker/login-action@v2.0.0 
+        uses: docker/login-action@v3.0.0 
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
@@ -61,7 +61,7 @@ jobs:
 
       - name: Build and push GHRC.io
         id: docker_build
-        uses: docker/build-push-action@v3.0.0
+        uses: docker/build-push-action@v5.1.0
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
